@@ -1,7 +1,5 @@
 .DS_Store
 node_modules
-/dist
-client_secret.json
 
 # local env files
 .env
