@@ -11,12 +11,11 @@
       :arrows="false"
       :infinite="true"
       :gap="10"
-      :dragging-distance="150"
+      :dragging-distance="70"
       :autoplay="isAutoplay"
       :pause-on-hover="true"
-      :duration="randomNumber(4000, 7000)"
-      prevent-y-scroll>
-      <vueper-slide v-if="sections.includes('has_image_on_s3')">
+      :duration="randomNumber(4000, 7000)">
+      <vueper-slide v-if="sections.includes('has_image_on_s3')" style="background-color: var(--primary-color);">
         <template v-slot:content>
           <v-lazy-image
             :id="`${snakeCaseName}-image`"
@@ -55,7 +54,7 @@
           </div>
         </template>
       </vueper-slide>
-      <vueper-slide class="sources-slide">
+      <vueper-slide style="background-color: var(--primary-color); color: var(--light-text);">
         <template v-slot:content>
           <div class="slide-content">
             <h3>Our Sources</h3>
@@ -204,11 +203,6 @@ export default {
 .vueperslide:nth-child(even) {
   background-color: var(--accent-color);
   color: var(--dark-text);
-}
-
-.sources-slide {
-  background-color: var(--primary-color) !important;
-  color: var(--light-text) !important;
 }
 
 .vueperslides__bullet {
