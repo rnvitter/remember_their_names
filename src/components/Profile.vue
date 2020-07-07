@@ -11,6 +11,7 @@
       :perPage="1"
       :paginationPadding="3"
       :paginationSize="5"
+      :minSwipeDistance="150"
       :navigateTo="startingIndex">
       <slide v-if="sections.includes('has_image_on_s3')" class="square">
         <v-lazy-image
