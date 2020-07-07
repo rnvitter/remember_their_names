@@ -166,7 +166,7 @@ h2, .link-title {
 }
 
 h3 {
-  font-size: 15px;
+  font-size: 14px;
   font-weight: 700;
   margin-bottom: 10px;
 }
