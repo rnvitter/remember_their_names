@@ -180,10 +180,6 @@ export default {
   left: 50%;
   transform: translate(-50%, -50%);
   z-index: 3;
-  /* opacity: 0;
-  animation: 1s normal forwards fadeIn;
-  animation-timing-function: ease-in;
-  animation-delay: 2s; */
 }
 
 .splash-screen-content h1 {
@@ -224,31 +220,11 @@ export default {
   transform: translateX(-50vw);
 }
 
-/* .splash-screen-action-btn {
-  position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
-  bottom: 20px;
-} */
-
 .nav-wrapper {
   display: flex;
   align-items: center;
   justify-content: space-between;
 }
-
-.VueCarousel-inner {
-  transition: none !important;
-}
-
-/* .VueCarousel-slide {
-  transition: ease 1s;
-  opacity: 0 !important;
-}
-
-.VueCarousel-slide-active {
-  opacity: 1 !important;
-} */
 
 .timeline {
   margin-top: 20px;
