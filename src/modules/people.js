@@ -2,7 +2,7 @@ import axios from 'axios'
 
 import * as types from './mutation-types'
 
-const API_URL = process.env.VUE_APP_API_URL
+import { API_URL, S3_URL } from '@/constants'
 
 const state = {
   list: []
@@ -28,8 +28,9 @@ const mutations = {
 const actions = {
   get: ({ commit }) => {
     if (process.env.NODE_ENV === 'production') {
-      let data = require(`@/assets/stories.json`)
-      commit(types.PUT_PEOPLE, data)
+      return axios.get(`${S3_URL}/stories.json`).then((response) => {
+        commit(types.PUT_PEOPLE, response.data)
+      })
     } else {
       return axios.get(`${API_URL}/data`)
         .then((response) => {

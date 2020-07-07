@@ -2,7 +2,7 @@ import axios from 'axios'
 
 // import * as types from './mutation-types'
 
-const API_URL = process.env.VUE_APP_API_URL
+import { API_URL, S3_URL } from '@/constants'
 
 const state = {}
 
@@ -23,8 +23,9 @@ const actions = {
 
     if (process.env.NODE_ENV === 'production') {
       const filename = sheet.replace(/ /g, '_').toLowerCase()
-      let data = require(`@/assets/${filename}.json`)
-      return parseData(data)
+      return axios.get(`${S3_URL}/${filename}.json`).then((response) => {
+        return parseData(response.data)
+      })
     } else {
       return axios.get(`${API_URL}/${endpoint}`, {
         params: {
@@ -49,8 +50,9 @@ const actions = {
 
     if (process.env.NODE_ENV === 'production') {
       const filename = 'schema_(admin_only)'
-      let data = require(`@/assets/${filename}.json`)
-      return parseData(data)
+      return axios.get(`${S3_URL}/${filename}.json`).then((response) => {
+        return parseData(response.data)
+      })
     } else {
       return axios.get(`${API_URL}/how_to_help`, {
         params: {
