@@ -65,22 +65,14 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import Pause from 'mdi-vue/Pause.vue'
-import Play from 'mdi-vue/Play.vue'
-import SkipNext from 'mdi-vue/SkipNext.vue'
-import ChevronUpCircle from 'mdi-vue/ChevronUpCircle.vue'
 
 import { ButtonWrapper, CalendarWrapper, ContactButton, Profile, Tabs } from '@/components'
 
 const components = {
   ButtonWrapper,
   CalendarWrapper,
-  ChevronUpCircle,
   ContactButton,
-  Pause,
-  Play,
   Profile,
-  SkipNext,
   Tabs
 }
 
