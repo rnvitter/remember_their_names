@@ -152,11 +152,11 @@ const methods = {
   },
   splitByWordCount(str, count) {
     let arr = str.split(' ')
-    let r = [];
+    let r = []
     while (arr.length) {
       r.push(arr.splice(0, count).join(' '))
     }
-    return r;
+    return r.filter(i => i !== ' ')
   }
 }
 
@@ -197,7 +197,7 @@ export default {
 }
 
 .profile-name {
-  font-size: 18px;
+  font-size: 20px;
   margin-bottom: 0px;
 }
 
@@ -283,6 +283,7 @@ export default {
   display: block;
   font-size: 10px;
   line-height: 14px;
+  width: 100%;
 }
 
 .photo {
