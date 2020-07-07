@@ -1,7 +1,7 @@
 import 'milligram/dist/milligram.min.css'
 
 import Vue from 'vue'
-// import { VLazyImagePlugin } from 'v-lazy-image';
+import { VLazyImagePlugin } from 'v-lazy-image';
 
 import App from './App.vue'
 
@@ -9,7 +9,7 @@ import router from './router'
 import store from './store'
 import filters from './filters'
 
-// Vue.use(VLazyImagePlugin)
+Vue.use(VLazyImagePlugin)
 
 Vue.config.productionTip = false
 

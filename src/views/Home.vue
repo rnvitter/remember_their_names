@@ -29,6 +29,9 @@
       <h2>We've recorded <span class="highlight">{{ people.length }}</span> of the countless people who have been murdered by police brutality or racially motivated violence.</h2>
       <h2>These are their stories.</h2>
     </div>
+    <template v-for="(person, index) in featuredview">
+      <profile :person="person" :key="`featuredview-${index}`"></profile>
+    </template>
     <div class="timeline-menu">
       <div class="timeline-inputs">
         <input
@@ -45,68 +48,38 @@
       <div>if you know someone we are missing from our records, please <contact-button></contact-button> at this email with their name and news sources we can use to verify. Also, please let us know if you see any incorrect information.</div>
       <calendar-wrapper v-if="showCalendar"></calendar-wrapper>
     </div>
-    <div class="nav-wrapper">
-      <tabs :tabs="['shuffle', 'timeline']" :selected="view" @tab-click="toggleView($event)"></tabs>
-      <div v-if="view === 'shuffle'" style="margin: 0 10px;">
-        <a class="icon-button" @click="autoPlay = !autoPlay" style="margin: 0 5px;">
-          <pause size="36" v-if="autoPlay"></pause>
-          <play size="36" v-else></play>
-        </a>
-        <a class="icon-button" @click="carouselMove('next')" style="margin: 0 5px;">
-          <skip-next size="36"></skip-next>
-        </a>
-      </div>
+    <template v-if="storiesLength > 0">
+      <template v-for="(person, index) in allView">
+        <profile :person="person" :key="`allview-${index}`"></profile>
+      </template>
+    </template>
+    <div class="read-more-wrapper" v-if="storiesLength + featuredStories < people.length">
+      <input
+        class="calendar-btn button button-clear"
+        type="submit"
+        @click="showMore"
+        value="Read More Stories">
     </div>
-    <div v-if="view === 'timeline'" class="timeline">
-      <profile-two
-        v-for="(person, index) in filteredPeople"
-        :person="person"
-        :key="index">
-      </profile-two>
-      <div class="timeline-btn">
-        <a class="icon-button" @click="scrollToStories()">
-          <chevron-up-circle size="24"></chevron-up-circle>
-        </a>
-      </div>
-    </div>
-    <carousel
-      v-if="view === 'shuffle'"
-      ref="carousel"
-      :autoplay="autoPlay"
-      :autoplayTimeout="5000"
-      :autoplayHoverPause="false"
-      :perPage="1"
-      :paginationEnabled="false"
-      style="overflow: hidden;">
-      <slide v-for="(person, index) in filteredPeople" :key="index">
-        <profile-horizontal :person="person"></profile-horizontal>
-      </slide>
-    </carousel>
   </div>
 </template>
 
 <script>
-import { mapGetters, mapActions } from 'vuex'
-import { Carousel, Slide } from 'vue-carousel'
+import { mapGetters } from 'vuex'
 import Pause from 'mdi-vue/Pause.vue'
 import Play from 'mdi-vue/Play.vue'
 import SkipNext from 'mdi-vue/SkipNext.vue'
 import ChevronUpCircle from 'mdi-vue/ChevronUpCircle.vue'
 
-import { ButtonWrapper, CalendarWrapper, ContactButton, Profile, ProfileTwo, ProfileHorizontal, Tabs } from '@/components'
+import { ButtonWrapper, CalendarWrapper, ContactButton, Profile, Tabs } from '@/components'
 
 const components = {
   ButtonWrapper,
   CalendarWrapper,
-  Carousel,
   ChevronUpCircle,
   ContactButton,
   Pause,
   Play,
   Profile,
-  ProfileTwo,
-  ProfileHorizontal,
-  Slide,
   SkipNext,
   Tabs
 }
@@ -114,49 +87,33 @@ const components = {
 const computed = {
   ...mapGetters({
     people: 'people/list',
-    screenSize: 'ux/screenSize',
-    view: 'ux/view'
+    screenSize: 'ux/screenSize'
   }),
-  filteredPeople () {
-    const people = [...this.people]
+  shuffledList () {
+    let people = [...this.people]
+    people = this.shuffle(people)
+    return people
+  },
+  featuredview () {
+    return this.shuffledList.filter((item, index) => index <= this.featuredStories - 1)
+  },
+  allView () {
     if (this.search !== '') {
-      return people.filter(p => p.name.toLowerCase().startsWith(this.search.toLowerCase()))
-    } else if (this.view === 'shuffle') {
-      return this.shuffle(people)
+      return this.shuffledList.filter(p => p.name.toLowerCase().startsWith(this.search.toLowerCase()))
     } else {
-      return people
+      let filtered = this.shuffledList.filter((item, index) => index > this.featuredStories - 1)
+      return filtered.filter((item, index) => index <= this.storiesLength - 1)
     }
   }
 }
 
 const methods = {
-  ...mapActions({
-    toggleView: 'ux/toggleView'
-  }),
   scrollToStories () {
     let target = document.querySelector('#read-their-stories')
     target.scrollIntoView({
       behavior: 'smooth',
       block: 'start'
     })
-  },
-  carouselMove (dir) {
-    if (this.autoPlay) {
-      this.autoPlay = false
-    }
-    const carousel = this.$refs.carousel
-    const currentPage = carousel.currentPage
-    const pageCount = carousel.pageCount
-    if (dir === 'prev') {
-      let page
-      if (currentPage === 0) {
-        page = pageCount
-      }
-      this.$refs.carousel.goToPage(page)
-    } else {
-      const page = currentPage + 1 > pageCount ? 0 : currentPage + 1
-      this.$refs.carousel.goToPage(page)
-    }
   },
   shuffle (array) {
     var currentIndex = array.length;
@@ -173,6 +130,14 @@ const methods = {
       array[randomIndex] = temporaryValue
     }
     return array
+  },
+  showMore () {
+    let storiesMinusFeatured = this.shuffledList.length - this.featuredStories
+    if (storiesMinusFeatured - this.storiesLength < this.featuredStories) {
+      this.storiesLength = storiesMinusFeatured
+    } else {
+      this.storiesLength = this.storiesLength + this.featuredStories
+    }
   }
 }
 
@@ -182,9 +147,11 @@ export default {
   computed,
   methods,
   data: () => ({
-    autoPlay: true,
     search: '',
-    showCalendar: false
+    showCalendar: false,
+    showAll: false,
+    featuredStories: 6,
+    storiesLength: 6
   }),
   mounted () {
     if (this.$route.hash) {
@@ -297,5 +264,9 @@ export default {
 .timeline-btn span {
   padding: 1px 0 3px;
   background-color: var(--primary-color);
+}
+
+.read-more-wrapper {
+  text-align: center;
 }
 </style>

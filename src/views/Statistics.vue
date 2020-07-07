@@ -23,6 +23,16 @@
           This article looks at how police spend their time in several different areas around the country using data that police departments post online. <span class="stat-highlight">Only about 4% of their time is spent dealing with violent crimes.</span>
         </div>
       </div>
+      <div class="spacing bottom-divider"></div>
+      <h2>Racial Homogeneity of Social Networks</h2>
+      <div class="link-wrapper">
+        <a class="link-title" style="font-size: 18px;" @click="openLink('https://www.prri.org/research/poll-race-religion-politics-americans-social-networks/')">
+          Race, Religion, and Political Affiliation of Americans’ Core Social Networks
+        </a>
+        <div class="link-description">
+          <span class="stat-highlight">75% of white Americans report having entirely white social networks.</span> Black Americans also have pretty homogenous core social networks as well (65%), where as Hispanics and Asians tend to have more diverse groups of friends than either black or white people.
+        </div>
+      </div>
     </div>
   </div>
 </template>
