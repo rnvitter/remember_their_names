@@ -15,7 +15,7 @@
       :autoplay="isAutoplay"
       :pause-on-hover="true"
       :duration="randomNumber(4000, 7000)"
-      prevent-y-scroll>
+      @mouse-enter="isAutoplay = false">
       <vueper-slide v-if="sections.includes('has_image_on_s3')" style="background-color: var(--primary-color);">
         <template v-slot:content>
           <v-lazy-image
@@ -26,7 +26,7 @@
         </template>
       </vueper-slide>
       <template v-if="sections.includes('description')">
-        <vueper-slide v-for="(item, index) in descriptionSections" :key="index">>
+        <vueper-slide v-for="(item, index) in splitSections(person.description)" :key="index">>
           <template v-slot:content>
               <div class="slide-content">
                 <h3>
@@ -34,7 +34,7 @@
                   <span style="font-weight: 500; opacity: 0.7;" v-if="index > 0">(cont.)</span>
                 </h3>
                 <div class="slide-text">{{ item }}</div>
-                <div class="read-more" v-if="index !== descriptionSections.length - 1">
+                <div class="read-more" v-if="index !== splitSections(person.description).length - 1">
                   read more
                   <arrow-right size="14"></arrow-right>
                 </div>
@@ -57,7 +57,7 @@
         </template>
       </vueper-slide>
       <template v-if="sections.includes('bio')">
-        <vueper-slide v-for="(item, index) in aboutSections" :key="index" class="yellow-slide">
+        <vueper-slide v-for="(item, index) in splitSections(person.bio)" :key="index" class="yellow-slide" style="opacity: 0.97;">
           <template v-slot:content>
             <div class="slide-content">
               <h3>
@@ -65,7 +65,7 @@
                 <span style="font-weight: 500;" v-if="index > 0">(cont.)</span>
               </h3>
               <div class="slide-text">{{ item }}</div>
-              <div class="read-more" v-if="index !== aboutSections.length - 1">
+              <div class="read-more" v-if="index !== splitSections(person.bio).length - 1">
                 read more
                 <arrow-right size="14"></arrow-right>
               </div>
@@ -110,14 +110,6 @@ const computed = {
   ...mapGetters({
     screenSize: 'ux/screenSize'
   }),
-  aboutSections () {
-    let about = this.person.bio
-    return this.splitByWordCount(about, 52)
-  },
-  descriptionSections () {
-    let description = this.person.description
-    return this.splitByWordCount(description, 52)
-  },
   sections () {
     const person = this.person
     let sections = []
@@ -129,10 +121,6 @@ const computed = {
   },
   sources () {
     return this.person.sources.split(',')
-  },
-  isAutoplay () {
-    const odds = Math.floor((Math.random() * 6) + 0)
-    return odds > 3 ? true : false
   }
 }
 
@@ -157,7 +145,16 @@ const methods = {
       r.push(arr.splice(0, count).join(' '))
     }
     return r.filter(i => i !== ' ')
-  }
+  },
+  splitSections (section) {
+    let sections = this.splitByWordCount(section, 80)
+    let clone = [...sections]
+    if (clone.length > 0 && clone[clone.length - 1].split(' ').length < 10) {
+      sections[sections.length - 2] = sections[sections.length - 2] + sections[sections.length - 1]
+      sections.splice(-1, 1)
+    }
+    return sections
+  },
 }
 
 export default {
@@ -168,10 +165,14 @@ export default {
   methods,
   data: () => ({
     snakeCaseName: null,
-    showSources: false
+    showSources: false,
+    isAutoplay: false
   }),
   beforeMount () {
     this.snakeCaseName = this.$options.filters.snakeCase(this.person.name)
+
+    const odds = Math.floor((Math.random() * 6) + 0)
+    this.isAutoplay = odds > 3 ? true : false
   }
 }
 </script>
