@@ -4,61 +4,72 @@
       <h2 class="profile-name">{{ person.name }}</h2>
       <div class="subtitle">{{ person.date_of_death | formatDate }}</div>
     </div>
-    <carousel
+    <vueper-slides
       :ref="`${snakeCaseName}-carousel`"
-      class="content-square"
-      paginationActiveColor="var(--accent-color)"
-      :perPage="1"
-      :paginationPadding="3"
-      :paginationSize="5"
-      :minSwipeDistance="150"
-      :navigateTo="startingIndex">
-      <slide v-if="sections.includes('has_image_on_s3')" class="square">
-        <v-lazy-image
-          :id="`${snakeCaseName}-image`"
-          class="photo"
-          :src="getImgUrl(person.name)"
-          alt="bio-photo">
-        </v-lazy-image>
-      </slide>
-      <slide v-if="sections.includes('description')">
-        <div class="slide-content">
-          <h3>How {{ genderPronoun(person.gender_pronoun).subject }} Died</h3>
-          <div class="slide-text">{{ person.description }}</div>
-        </div>
-      </slide>
-      <slide v-if="sections.includes('petition')">
-        <div class="slide-content">
-          <h3>{{ person.petition_title }}</h3>
-          <div class="slide-text">{{ person.petition_description }}</div>
-          <button-wrapper
-            style="margin: 20px auto; max-width: 260px;"
-            text="Sign the Petition"
-            :onClick="() => goTo(person.petition_link)"
-            color="--accent-color">
-          </button-wrapper>
-        </div>
-      </slide>
-      <slide v-if="sections.includes('bio')">
-        <div class="slide-content">
-          <h3>About {{ genderPronoun(person.gender_pronoun).possessive }} Life</h3>
-          <div class="slide-text">{{ person.bio }}</div>
-        </div>
-        <div class="slide-text">{{ person.bio }}</div>
-      </slide>
-      <slide>
-        <div class="slide-content">
-          <h3>Our Sources</h3>
-          <a class="source" v-for="(source, index) in sources" :key="index" :href="source" target="_blank">{{ source }}</a>
-        </div>
-      </slide>
-    </carousel>
+      class="no-shadow"
+      bullets-outside
+      :arrows="false"
+      :infinite="true"
+      :gap="10"
+      :dragging-distance="150"
+      :autoplay="isAutoplay"
+      :pause-on-hover="true"
+      :duration="randomNumber(4000, 7000)"
+      prevent-y-scroll>
+      <vueper-slide v-if="sections.includes('has_image_on_s3')">
+        <template v-slot:content>
+          <v-lazy-image
+            :id="`${snakeCaseName}-image`"
+            class="photo"
+            :src="getImgUrl(person.name)">
+          </v-lazy-image>
+        </template>
+      </vueper-slide>
+      <vueper-slide v-if="sections.includes('description')">
+        <template v-slot:content>
+          <div class="slide-content">
+            <h3>How {{ genderPronoun(person.gender_pronoun).subject }} Died</h3>
+            <div class="slide-text">{{ person.description }}</div>
+          </div>
+        </template>
+      </vueper-slide>
+      <vueper-slide v-if="sections.includes('petition')">
+        <template v-slot:content>
+          <div class="slide-content">
+            <h3>{{ person.petition_title }}</h3>
+            <div class="slide-text">{{ person.petition_description }}</div>
+            <button-wrapper
+              style="margin: 20px auto; max-width: 260px;"
+              text="Sign the Petition"
+              :onClick="() => goTo(person.petition_link)"
+              color="--accent-color">
+            </button-wrapper>
+          </div>
+        </template>
+      </vueper-slide>
+      <vueper-slide v-if="sections.includes('bio')">
+        <template v-slot:content>
+          <div class="slide-content">
+            <h3>About {{ genderPronoun(person.gender_pronoun).possessive }} Life</h3>
+            <div class="slide-text">{{ person.bio }}</div>
+          </div>
+        </template>
+      </vueper-slide>
+      <vueper-slide class="sources-slide">
+        <template v-slot:content>
+          <div class="slide-content">
+            <h3>Our Sources</h3>
+            <a class="source" v-for="(source, index) in sources" :key="index" :href="source" target="_blank">{{ source }}</a>
+          </div>
+        </template>
+      </vueper-slide>
+    </vueper-slides>
   </div>
 </template>
 
 <script>
 import { mapGetters } from 'vuex'
-import { Carousel, Slide } from 'vue-carousel'
+import { VueperSlides, VueperSlide } from 'vueperslides'
 
 import ButtonWrapper from './ButtonWrapper'
 
@@ -71,8 +82,8 @@ const props = {
 
 const components = {
   ButtonWrapper,
-  Carousel,
-  Slide
+  VueperSlides,
+  VueperSlide
 }
 
 const computed = {
@@ -91,11 +102,9 @@ const computed = {
   sources () {
     return this.person.sources.split(',')
   },
-  startingIndex () {
-    if (this.sections.includes('has_image_on_s3')) {
-      return 0
-    }
-    return Math.floor((Math.random() * this.sections.length) + 0)
+  isAutoplay () {
+    const odds = Math.floor((Math.random() * 6) + 0)
+    return odds > 3 ? true : false
   }
 }
 
@@ -109,6 +118,9 @@ const methods = {
   },
   goTo (link) {
     window.open(link, '_blank')
+  },
+  randomNumber(min, max) {
+    return Math.random() * (max - min) + min;
   }
 }
 
@@ -130,7 +142,7 @@ export default {
 
 <style>
 .profile {
-  margin: 20px 5px;
+  margin: 15px 5px;
   width: calc(50% - 10px);
   display: inline-block;
 }
@@ -162,54 +174,67 @@ export default {
   margin-left: 1px;
 }
 
-.VueCarousel-wrapper {
+.vueperslide {
+  overflow: auto;
+}
+
+.vueperslides__inner {
   position: relative;
   width: 100%;
+  text-align: center;
   /* padding: 20px; */
 }
 
-.VueCarousel-wrapper:after {
+.vueperslides__inner:after {
   content: "";
   display: block;
   padding-top: 100%;
 }
 
-.VueCarousel-inner {
+.vueperslides__parallax-wrapper {
   position: absolute;
   width: 100%;
   height: 100% !important;
 }
 
 .slide-content {
-  height: 100%;
-  width: 100%;
-  overflow: auto;
-  text-align: center;
-  padding: 10px 20px;
+  padding: 10px;
 }
 
-.VueCarousel-slide {
-  border: 1px solid var(--primary-color);
-}
-
-.VueCarousel-slide:nth-child(even) {
+.vueperslide:nth-child(even) {
   background-color: var(--accent-color);
   color: var(--dark-text);
-  opacity: 0.95;
 }
 
-.VueCarousel-slide:nth-child(odd),
-.VueCarousel-slide:last-child {
-  background-color: var(--primary-color);
-  color: var(--light-text);
-  font-weight: 400;
+.sources-slide {
+  background-color: var(--primary-color) !important;
+  color: var(--light-text) !important;
 }
 
-.VueCarousel-dot-container,
-.VueCarousel-dot,
-.VueCarousel-dot--active {
-  margin-top: 5px !important;
-  margin-bottom: 0 !important;
+.vueperslides__bullet {
+  margin: 2px 4px;
+}
+
+.vueperslides__bullet .default {
+  background-color: rgb(239, 239, 239);
+  border: none;
+  box-shadow: none;
+  transition: 0.2s;
+  width: 6px;
+  height: 6px;
+}
+
+.vueperslides__bullet--active .default {
+  background-color: var(--accent-color);
+}
+
+.vueperslides__bullets button {
+  height: 30px;
+}
+
+.vueperslides__bullets button:focus,
+.vueperslides__bullets button:hover {
+  background-color: transparent;
 }
 
 .slide-text {
@@ -220,8 +245,6 @@ export default {
 }
 
 .source {
-  color: var(--light-text);
-  /* text-decoration: underline; */
   word-break: break-all;
   margin-bottom: 8px;
   font-weight: 400;
