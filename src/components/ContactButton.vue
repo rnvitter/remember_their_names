@@ -1,7 +1,7 @@
 <template>
   <div class="contact-btn-wrapper">
     <tooltip :tooltipText="copied ? 'Our email was copied to your clipboard!' : 'Tap to copy our email to your clipboard!'">
-      <a :class="['contact-us-btn', linkTitle ? 'link-title' : '']" @click="copyEmail">contact us</a>
+      <a :class="['contact-us-btn', linkTitle ? 'link-title' : '']" @click="copyEmail">{{ text }}</a>
     </tooltip>
     <span id="contact-us-email" style="display: none;">help@remembertheirnames.io</span>
   </div>
@@ -18,6 +18,11 @@ const props = {
   linkTitle: {
     type: Boolean,
     required: false
+  },
+  text: {
+    type: String,
+    required: false,
+    default: 'Contact Us'
   }
 }
 

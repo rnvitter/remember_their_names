@@ -148,7 +148,7 @@ a:hover {
   color: var(--accent-color);
 }
 
-h1, h2, h3, .button, .link-title {
+h1, h2, h3, .button, .link-title, .profile-name {
   font-family: 'Oswald', sans-serif;
   font-weight: 700;
   text-transform: uppercase;
@@ -162,23 +162,13 @@ h1 {
 }
 
 h2, .link-title {
-  font-size: 28px;
+  font-size: 24px;
 }
 
 h3 {
-  font-size: 20px;
-  margin: 10px 0;
-  opacity: 0.7;
-}
-
-.subtitle {
-  color: var(--secondary-color);
-  font-family: 'Oswald', sans-serif;
-  font-size: 14px;
-  font-weight: 400;
-  letter-spacing: 2px;
-  text-transform: uppercase;
-  margin-left: 1px;
+  font-size: 18px;
+  font-weight: 700;
+  margin-bottom: 10px;
 }
 
 .app-loading {

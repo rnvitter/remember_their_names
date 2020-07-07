@@ -1,53 +1,65 @@
 <template>
-  <div>
-    <div class="full-profile" :id="`${snakeCaseName}`">
-      <div class="event-marker" data-html2canvas-ignore="true"></div>
-      <div class="vertical-line" data-html2canvas-ignore="true"></div>
-      <div class="title">
-        <div class="subtitle">{{ person.date_of_death | formatDate }}</div>
-        <h1 style="text-align: left;">{{ person.name }}</h1>
-      </div>
-      <div class="description" :style="`${showModal ? 'bottom: 0px;' : 'bottom: 10px;'}`">
-        <div :class="`description-text${showModal ? '' : ' overflow-text'}`" v-if="showBio">{{ person.bio }}</div>
-        <div :class="`description-text${showModal ? '' : ' overflow-text'}`" v-else>{{ person.description }}</div>
-        <div v-if="loading">
-          <div style="text-align: center; margin-top: 10px; font-size: 14px;">Learn more at</div>
-          <div class="website-url">www.remembertheirnames.io</div>
-        </div>
-        <div data-html2canvas-ignore="true" style="display: flex; justify-content: center; margin-top: 10px;">
-          <input
-            v-if="showBio && person.description"
-            class="button button-clear"
-            type="submit"
-            @click="showBio = false"
-            :value="`Read How ${genderPronoun(person.gender_pronoun).subject} Died`">
-          <input
-            v-else-if="!showBio && person.bio"
-            v-show="person.bio"
-            class="button button-clear"
-            type="submit"
-            @click="showBio = true"
-            :value="`Read About ${genderPronoun(person.gender_pronoun).possessive} Life`">
-        </div>
-      </div>
-      <div class="photo-wrapper">
-        <a class="photo-blur">
-          <v-lazy-image
-            :id="`${snakeCaseName}-image`"
-            class="photo"
-            :src="getImgUrl(person.name)"
-            alt="bio-photo"
-          ></v-lazy-image>
-        </a>
-      </div>
+  <div class="profile" :id="`${snakeCaseName}`">
+    <div class="profile-header">
+      <h2 class="profile-name">{{ person.name }}</h2>
+      <div class="subtitle">{{ person.date_of_death | formatDate }}</div>
     </div>
+    <carousel
+      :ref="`${snakeCaseName}-carousel`"
+      class="content-square"
+      paginationActiveColor="var(--accent-color)"
+      :perPage="1"
+      :paginationPadding="3"
+      :paginationSize="5"
+      :navigateTo="startingIndex">
+      <slide v-if="sections.includes('has_image_on_s3')" class="square">
+        <v-lazy-image
+          :id="`${snakeCaseName}-image`"
+          class="photo"
+          :src="getImgUrl(person.name)"
+          alt="bio-photo">
+        </v-lazy-image>
+      </slide>
+      <slide v-if="sections.includes('description')">
+        <div class="slide-content">
+          <h3>How {{ genderPronoun(person.gender_pronoun).subject }} Died</h3>
+          <div class="slide-text">{{ person.description }}</div>
+        </div>
+      </slide>
+      <slide v-if="sections.includes('petition')">
+        <div class="slide-content">
+          <h3>{{ person.petition_title }}</h3>
+          <div class="slide-text">{{ person.petition_description }}</div>
+          <button-wrapper
+            style="margin: 20px auto; max-width: 260px;"
+            text="Sign the Petition"
+            :onClick="() => goTo(person.petition_link)"
+            color="--accent-color">
+          </button-wrapper>
+        </div>
+      </slide>
+      <slide v-if="sections.includes('bio')">
+        <div class="slide-content">
+          <h3>About {{ genderPronoun(person.gender_pronoun).possessive }} Life</h3>
+          <div class="slide-text">{{ person.bio }}</div>
+        </div>
+        <div class="slide-text">{{ person.bio }}</div>
+      </slide>
+      <slide>
+        <div class="slide-content">
+          <h3>Our Sources</h3>
+          <a class="source" v-for="(source, index) in sources" :key="index" :href="source" target="_blank">{{ source }}</a>
+        </div>
+      </slide>
+    </carousel>
   </div>
 </template>
 
 <script>
-import { Modal } from '@/components'
-import ButtonWrapper from './ButtonWrapper'
 import { mapGetters } from 'vuex'
+import { Carousel, Slide } from 'vue-carousel'
+
+import ButtonWrapper from './ButtonWrapper'
 
 const props = {
   person: {
@@ -58,36 +70,56 @@ const props = {
 
 const components = {
   ButtonWrapper,
-  Modal
+  Carousel,
+  Slide
 }
 
 const computed = {
   ...mapGetters({
     screenSize: 'ux/screenSize'
-  })
+  }),
+  sections () {
+    const person = this.person
+    let sections = []
+    if (person.has_image_on_s3 === 'TRUE') sections.push('has_image_on_s3')
+    if (person.description) sections.push('description')
+    if (person.petition_title && person.petition_description && person.petition_link) sections.push('petition')
+    if (person.bio) sections.push('bio')
+    return sections
+  },
+  sources () {
+    return this.person.sources.split(',')
+  },
+  startingIndex () {
+    if (this.sections.includes('has_image_on_s3')) {
+      return 0
+    }
+    return Math.floor((Math.random() * this.sections.length) + 0)
+  }
 }
 
 const methods = {
-  getImgUrl (name) {
-    let imageName = this.$options.filters.snakeCase(name)
-    return `https://s3.us-east-1.amazonaws.com/remembertheirnames.io/images/${imageName}.jpg`
-  },
   genderPronoun (gender) {
     return this.$options.filters.genderPronoun(gender)
+  },
+  getImgUrl (name) {
+    let imageName = this.$options.filters.snakeCase(name)
+    return `https://remembertheirnames-assets.s3.us-east-1.amazonaws.com/images/${imageName}.jpg`
+  },
+  goTo (link) {
+    window.open(link, '_blank')
   }
 }
 
 export default {
-  name: 'Profile',
+  name: 'ProfileTwo',
   props,
   components,
   computed,
   methods,
   data: () => ({
-    showBio: false,
     snakeCaseName: null,
-    loading: false,
-    canvas: null
+    showSources: false
   }),
   beforeMount () {
     this.snakeCaseName = this.$options.filters.snakeCase(this.person.name)
@@ -95,136 +127,115 @@ export default {
 }
 </script>
 
-<style scoped>
-.full-profile {
-  position: relative;
-  height: 100vh;
-  max-height: 800px;
+<style>
+.profile {
+  margin: 20px 5px;
+  width: calc(50% - 10px);
+  display: inline-block;
 }
 
-.full-profile .vertical-line {
-  position: absolute;
-  z-index: 3;
-  left: 0px;
-  top: 0px;
-  height: 100%;
-  border-left: 4px solid var(--secondary-color);
-  z-index: 3;
-}
-
-.full-profile .event-marker {
-  position: absolute;
-  top: 12px;
-  left: -6px;
-  height: 18px;
-  width: 18px;
-  background-color: var(--primary-color);
-  border: solid 4px var(--accent-color);
-  border-radius: 50%;
-  z-index: 4;
-}
-
-.title {
-  position: absolute;
-  top: 8px;
-  z-index: 2;
-  margin-left: 20px;
-  /* animation: fadeIn ease 3s; */
-}
-
-.description {
-  position: absolute;
+.profile-header {
   text-align: center;
-  z-index: 2;
-  font-size: 16px;
-  line-height: 22px;
-  /* animation: fadeIn ease 3s; */
+  padding: 10px 0;
+  /* margin-bottom: 10px; */
 }
 
-.description-text {
+.profile-header:nth-child(even) {
+  background-color: var(--secondary-color);
+  text-align: center;
+  padding: 10px 0;
+  /* margin-bottom: 10px; */
+}
+
+.profile-name {
+  margin-bottom: 0px;
+}
+
+.subtitle {
+  color: var(--secondary-color);
+  font-family: 'Oswald', sans-serif;
+  font-size: 18px;
+  font-weight: 400;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  margin-left: 1px;
+}
+
+.VueCarousel-wrapper {
+  position: relative;
+  width: 100%;
+  /* padding: 20px; */
+}
+
+.VueCarousel-wrapper:after {
+  content: "";
+  display: block;
+  padding-top: 100%;
+}
+
+.VueCarousel-inner {
+  position: absolute;
+  width: 100%;
+  height: 100% !important;
+}
+
+.slide-content {
+  height: 100%;
+  width: 100%;
+  overflow: auto;
+  text-align: center;
   padding: 10px 20px;
 }
 
-.overflow-text {
-  max-height: 180px;
-  overflow-y: auto;
+.VueCarousel-slide {
+  border: 1px solid var(--primary-color);
 }
 
-.photo-wrapper {
-  position: absolute;
-  top: 70px;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  width: 100%;
-  height: auto;
-  z-index: 1;
-  animation: fadeIn ease 1s;
+.VueCarousel-slide:nth-child(even) {
+  background-color: var(--accent-color);
+  color: var(--dark-text);
+  opacity: 0.95;
 }
 
-.photo-blur {
+.VueCarousel-slide:nth-child(odd),
+.VueCarousel-slide:last-child {
+  background-color: var(--primary-color);
+  color: var(--light-text);
+  font-weight: 400;
+}
+
+.VueCarousel-dot-container,
+.VueCarousel-dot,
+.VueCarousel-dot--active {
+  margin-top: 5px !important;
+  margin-bottom: 0 !important;
+}
+
+.slide-text {
+  /* font-family: 'Oswald', sans-serif; */
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 22px;
+}
+
+.source {
+  color: var(--light-text);
+  /* text-decoration: underline; */
+  word-break: break-all;
+  margin-bottom: 8px;
+  font-weight: 400;
   display: block;
-  position: relative;
+  font-size: 12px;
+  line-height: 16px;
 }
 
 .photo {
   width: 100%;
-  opacity: 0.8;
 }
 
-/* .v-lazy-image {
-  opacity: 0;
-  transition: opacity 4s;
-}
-
-.v-lazy-image-loaded {
-  opacity: 1;
-} */
-
-.photo-blur:before {
-  display:block;
-  content:'';
-  position:absolute;
-  width:100%;
-  height:100%;
-  box-shadow: inset 0px 0px 20px 6px #000;
-}
-
-.website-url {
-  font-family: 'Oswald';
-  color: var(--accent-color);
-  text-align: center;
-  margin-bottom: 10px;
-  font-weight: 700;
-  font-size: 18px;
-}
-
-#share-image-canvas {
-  width: 100% !important;
-  height: auto !important;
-}
-
-.modal-share-description {
-  margin: 10px 0;
-  padding-top: 10px;
-  text-align: center;
-  border-top: 1px solid var(--secondary-color);
-}
-
-.canvas-wrapper {
-  height: 100%;
-  position: relative;
-  width: 100%;
-}
-
-.canvas-image {
-  height: 100%;
-  position: relative;
-  width: 100%;
-  z-index: 1;
-}
-.shareable-image {
-  height: auto;
-  width: 100%;
+@media only screen and (max-width: 600px) {
+  .profile {
+    width: 100%;
+  }
 }
 </style>
