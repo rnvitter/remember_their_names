@@ -16,7 +16,7 @@
       :pause-on-hover="true"
       :duration="randomNumber(4000, 7000)"
       prevent-y-scroll>
-      <vueper-slide v-if="sections.includes('has_image_on_s3')">
+      <vueper-slide v-if="sections.includes('has_image_on_s3')" class="image-slide">
         <template v-slot:content>
           <v-lazy-image
             :id="`${snakeCaseName}-image`"
@@ -204,6 +204,10 @@ export default {
 .vueperslide:nth-child(even) {
   background-color: var(--accent-color);
   color: var(--dark-text);
+}
+
+.image-slide {
+  background-color: var(--primary-color) !important;
 }
 
 .sources-slide {
