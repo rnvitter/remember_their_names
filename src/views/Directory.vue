@@ -10,34 +10,32 @@
         <template v-else>
           <h2 class="card-row-title">Read Their Stories</h2>
           <div class="card-row">
-            <template v-for="(person, index) in shuffledStories">
-              <div
-                class="rtn-card"
-                style="width: 228px;"
-                :key="`stories-${index}`"
-                @click="cardClick(person, 'stories')">
-                <v-lazy-image
-                  class="rtn-card-image"
-                  style="height: 100%;"
-                  v-if="person.has_image_on_s3 === 'TRUE'"
-                  :id="`${$options.filters.snakeCase(person.name)}-image`"
-                  :src="getImgUrl(person.name)">
-                </v-lazy-image>
-                <div class="rtn-profile-fallback" v-else>
-                  <div class="profile-header">
-                    <h2 class="profile-name">{{ person.name }}</h2>
-                    <div class="subtitle">{{ person.date_of_death | formatDate }}</div>
-                  </div>
-                </div>
-              </div>
+            <template v-for="(item, index) in shuffledStories">
+              <profile-card
+                :item="item"
+                :index="index"
+                :key="index"
+                @click.native="cardClick(item, 'stories')">
+              </profile-card>
             </template>
           </div>
-          <profile-two :person="details" v-if="details && activeRow === 'stories'"></profile-two>
+          <profile-details :item="details" v-if="details && activeRow === 'stories'"></profile-details>
           <div>
             <h2 class="card-row-title">This Week's Curated Collection</h2>
             <div class="card-row">
               <template v-for="(item, rowIndex) in featured">
-                <card :item="item" :key="rowIndex" @click.native="cardClick(item, 'featured')"></card>
+                <profile-card
+                  v-if="item.bio"
+                  :item="item"
+                  :index="rowIndex"
+                  :key="rowIndex"
+                  :featured="true"
+                  @click.native="cardClick(item, 'featured')">
+                </profile-card>
+                <card v-else
+                  :item="item"
+                  :key="rowIndex"
+                  @click.native="cardClick(item, 'featured')"></card>
               </template>
             </div>
             <div class="card-details" v-if="details && activeRow === 'featured'">
@@ -67,20 +65,17 @@
 
 <script>
 import { mapActions, mapGetters } from 'vuex'
-import LinkPrevue from 'link-prevue'
-import { VueperSlides, VueperSlide } from 'vueperslides'
 
-import { Buttons, Card, Profile, ProfileTwo, SelectList } from '@/components'
+import { Buttons, Card, ProfileCard, ProfileDetails } from '@/components'
+import mixin from '@/mixin'
+
+const mixins = [mixin]
 
 const components = {
   Buttons,
   Card,
-  Profile,
-  ProfileTwo,
-  SelectList,
-  LinkPrevue,
-  VueperSlides,
-  VueperSlide
+  ProfileCard,
+  ProfileDetails
 }
 
 const computed = {
@@ -98,7 +93,7 @@ const computed = {
     return resources
   },
   featured () {
-    const resources = this.resources.filter(r => r.featured === 'TRUE')
+    let resources = this.resources.filter(r => r.featured === 'TRUE')
     let stories = this.people.filter(r => r.featured === 'TRUE')
     // stories = stories.forEach(r => r.isStory = true)
     return this.shuffle([...resources, ...stories])
@@ -111,16 +106,13 @@ const methods = {
     getSchema: 'resources/getSchema'
   }),
   cardClick (item, index) {
-    if (item === this.details) {
+    if (item === this.details && this.activeRow === index) {
       this.details = null
       this.activeRow = null
     } else {
       this.details = item
       this.activeRow = index
     }
-  },
-  openLink (link) {
-    window.open(link, '_blank')
   },
   shuffle (array) {
     var currentIndex = array.length;
@@ -137,16 +129,6 @@ const methods = {
       array[randomIndex] = temporaryValue
     }
     return array
-  },
-  getImgUrl (name) {
-    let imageName = this.$options.filters.snakeCase(name)
-    return `https://remembertheirnames-assets.s3.us-east-1.amazonaws.com/images/${imageName}.jpg`
-  }
-}
-
-const watch = {
-  details () {
-    console.log(this.details)
   }
 }
 
@@ -155,7 +137,7 @@ export default {
   components,
   computed,
   methods,
-  watch,
+  mixins,
   data: () => ({
     loading: false,
     resources: [],

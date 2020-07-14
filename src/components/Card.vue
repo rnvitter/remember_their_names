@@ -27,12 +27,7 @@ const components = {
 
 export default {
   props,
-  components,
-  data: () => ({
-    loading: true,
-    img: null,
-    width: null
-  })
+  components
 }
 </script>
 

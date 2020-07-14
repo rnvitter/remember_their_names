@@ -22,7 +22,9 @@ const actions = {
     if (process.env.NODE_ENV === 'production') {
       const filename = sheet.replace(/ /g, '_').toLowerCase()
       return axios.get(`${S3_URL}/${filename}.json`).then((response) => {
-        return parseData(response.data)
+        let result = parseData(response.data)
+        result = result.forEach(r => r.sheet = 'resources')
+        return result
       })
     } else {
       return axios.get(`${API_URL}/${endpoint}`, {
@@ -31,8 +33,8 @@ const actions = {
         }
       })
         .then((response) => {
-          console.log(parseData(response.data))
-          return parseData(response.data)
+          let result = parseData(response.data)
+          return result
         })
         .catch((error) => {
           console.error(error)

@@ -217,7 +217,7 @@ select:focus {
 
 /* shared */
 .spacing {
-  margin: 20px 0;
+  margin-bottom: 20px;
 }
 
 .bottom-divider {

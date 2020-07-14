@@ -1,45 +1,45 @@
 <template>
-  <div class="profile-two" :id="`${snakeCaseName}`">
+  <div class="profile-details" :id="`${snakeCaseName}`">
     <!-- <div class="profile-header">
-      <h2 class="profile-name">{{ person.name }}</h2>
-      <div class="subtitle">{{ person.date_of_death | formatDate }}</div>
+      <h2 class="profile-name">{{ item.name }}</h2>
+      <div class="subtitle">{{ item.date_of_death | formatDate }}</div>
     </div> -->
     <div class="row">
       <v-lazy-image
-        v-if="person.has_image_on_s3"
+        v-if="item.has_image_on_s3"
         :id="`${snakeCaseName}-image`"
-        class="profile-two-photo"
-        :src="getImgUrl(person.name)">
+        class="profile-details-photo"
+        :src="getImgUrl(item.name)">
       </v-lazy-image>
       <div class="profile-info">
-        <div class="profile-two-header">
-          <h2 style="margin-bottom: 0;">{{ person.name }}</h2>
+        <div class="profile-details-header">
+          <h2 style="margin-bottom: 0;">{{ item.name }}</h2>
           <div>
             <input
-              v-if="person.donation_link"
+              v-if="item.donation_link"
               class="button button-clear"
               style="margin-right: 10px;"
               type="submit"
               value="Donate"
-              @click="goTo(person.donation_link)">
+              @click="goTo(item.donation_link)">
             <input
-              v-if="person.petition_link"
+              v-if="item.petition_link"
               class="button button-clear"
               type="submit"
               value="Sign The Petition"
-              @click="goTo(person.petition_link)">
+              @click="goTo(item.petition_link)">
           </div>
         </div>
         <div style="height: calc(100% - 40px); overflow: auto; padding-bottom: 30px;">
-          <div class="slide-content">
-            <h3>How {{ genderPronoun(person.gender_pronoun).subject }} Died</h3>
-            <div class="slide-text">{{ person.description }}</div>
+          <div class="spacing">
+            <h3>How {{ genderPronoun(item.gender_pronoun).subject }} Died</h3>
+            <div class="slide-text">{{ item.description }}</div>
           </div>
-          <div class="slide-content">
-            <h3>About {{ genderPronoun(person.gender_pronoun).possessive }} Life</h3>
-            <div class="slide-text">{{ person.bio }}</div>
+          <div class="spacing">
+            <h3>About {{ genderPronoun(item.gender_pronoun).possessive }} Life</h3>
+            <div class="slide-text">{{ item.bio }}</div>
           </div>
-          <div class="slide-content">
+          <div class="spacing">
             <h3>Our Sources</h3>
             <a class="source" v-for="(source, index) in sources" :key="index" :href="source" target="_blank">{{ source }}</a>
           </div>
@@ -56,7 +56,7 @@ import ArrowRight from 'mdi-vue/ArrowRight.vue'
 import ButtonWrapper from './ButtonWrapper'
 
 const props = {
-  person: {
+  item: {
     type: Object,
     required: true
   }
@@ -72,7 +72,7 @@ const computed = {
     screenSize: 'ux/screenSize'
   }),
   sources () {
-    return this.person.sources.split(',')
+    return this.item.sources.split(',')
   }
 }
 
@@ -99,13 +99,13 @@ export default {
     snakeCaseName: null
   }),
   beforeMount () {
-    this.snakeCaseName = this.$options.filters.snakeCase(this.person.name)
+    this.snakeCaseName = this.$options.filters.snakeCase(this.item.name)
   }
 }
 </script>
 
 <style>
-.profile-two {
+.profile-details {
   margin: 10px auto;
   width: 100%;
   padding: 0 10px;
@@ -134,13 +134,12 @@ export default {
   height   : 4em;
 }
 
-.profile-two-header {
+.profile-details-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
   margin-bottom: 15px;
   height: 30px;
-  padding: 0 10px;
 }
 
 .profile-name {
@@ -176,7 +175,7 @@ export default {
   width: 100%;
 }
 
-.profile-two-photo {
+.profile-details-photo {
   width: 300px;
   height: 300px;
 }
