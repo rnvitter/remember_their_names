@@ -11,17 +11,3 @@ export function debounce (fn, time) {
     timeout = setTimeout(functionCall, time)
   }
 }
-
-export function shuffle (arr) {
-  let array = arr;
-  for (let i = array.length - 1; i > 0; i--) {
-    // pickup a random element
-    const j = Math.floor(Math.random() * i);
-    const temp = array[i];
-
-    // swap it with the current element
-    array[i] = array[j];
-    array[j] = temp;
-  }
-  return array;
-}

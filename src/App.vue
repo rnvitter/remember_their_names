@@ -23,8 +23,6 @@ const components = {
 const methods = {
   ...mapActions({
     getPeople: 'people/get',
-    setMonth: 'calendar/setMonth',
-    setYear: 'calendar/setYear',
     setScreenSize: 'ux/setScreenSize'
   }),
   onResize () {
@@ -51,15 +49,7 @@ export default {
   beforeMount () {
     this.loading = true
 
-    const d = new Date()
-
-    let promises = [
-      this.getPeople(),
-      this.setYear(d.getFullYear()),
-      this.setMonth(d.getMonth())
-    ]
-
-    Promise.all(promises).then(() => {
+    this.getPeople().then(() => {
       this.loading = false
     })
   },
@@ -72,15 +62,6 @@ export default {
 </script>
 
 <style>
-/* z-index */
-  /* profile */
-    /* photo - 1 */
-    /* title and description - 2 */
-    /* timeline vertical line - 3 */
-    /* timeline event marker - 4 */
-  /* home buttons - 5 */
-  /* footer - 6 */
-
 :root {
   --primary-color: #121212;
   --accent-color: #FCE21B;
@@ -142,13 +123,6 @@ a:hover {
   color: var(--accent-color);
 }
 
-.highlight {
-  text-transform: uppercase;
-  font-family: 'Oswald', sans-serif;
-  font-weight: 700;
-  color: var(--accent-color);
-}
-
 h1, h2, h3, .link-title, .profile-name {
   font-family: 'Oswald', sans-serif;
   font-weight: 700;
@@ -166,11 +140,6 @@ h2, .link-title {
   font-size: 24px;
 }
 
-.text-center {
-  text-align: center;
-  justify-content: center;
-}
-
 .app-loading {
   font-family: 'Oswald', sans-serif;
   font-size: 18px;
@@ -182,17 +151,6 @@ h2, .link-title {
 }
 
 /* buttons */
-.fixed-buttons {
-  position: fixed;
-  bottom: 5px;
-  left: 50%;
-  transform: translateX(-50%);
-  display: inline-block;
-  z-index: 5;
-  width: 100%;
-  animation: fadeIn ease 1s;
-}
-
 .button {
   color: var(--dark-text);
   font-weight: 900;
@@ -231,14 +189,6 @@ input.button.button-clear:focus {
 
 .text-button:hover {
   opacity: 0.7;
-}
-
-.icon-button {
-  cursor: pointer;
-}
-
-.icon-button span {
-  color: var(--accent-color);
 }
 
 /* inputs */

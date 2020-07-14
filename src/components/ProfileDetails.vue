@@ -90,7 +90,7 @@ const methods = {
 }
 
 export default {
-  name: 'Profile',
+  name: 'ProfileDetails',
   props,
   components,
   computed,

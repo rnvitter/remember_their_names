@@ -1,7 +1,5 @@
 import axios from 'axios'
 
-// import * as types from './mutation-types'
-
 import { API_URL, S3_URL } from '@/constants'
 
 const state = {}
@@ -42,13 +40,6 @@ const actions = {
     }
   },
   getSchema: () => {
-    // function parseData(response) {
-    //   let rows = response.rows
-    //   let headers = response.headers
-    //   let result = rows.map(a => headers.reduce((r, k, i) => Object.assign(r, { [k]: a[i] }), {}))
-    //   return result
-    // }
-
     if (process.env.NODE_ENV === 'production') {
       const filename = 'Collections'
       return axios.get(`${S3_URL}/${filename}.json`).then((response) => {
