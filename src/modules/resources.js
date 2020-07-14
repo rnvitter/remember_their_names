@@ -40,27 +40,45 @@ const actions = {
         })
     }
   },
+  getMetaData: ({ commit }, url) => {
+    return axios.get(`${API_URL}/metadata`, {
+      params: {
+        url: url
+      }
+    })
+      .then((response) => {
+        return response.data
+      })
+      .catch((error) => {
+        console.error(error)
+      })
+  },
   getSchema: () => {
-    function parseData(response) {
-      let rows = response.rows
-      let headers = response.headers
-      let result = rows.map(a => headers.reduce((r, k, i) => Object.assign(r, { [k]: a[i] }), {}))
-      return result
-    }
+    // function parseData(response) {
+    //   let rows = response.rows
+    //   let headers = response.headers
+    //   let result = rows.map(a => headers.reduce((r, k, i) => Object.assign(r, { [k]: a[i] }), {}))
+    //   return result
+    // }
 
     if (process.env.NODE_ENV === 'production') {
-      const filename = 'schema_(admin_only)'
+      const filename = 'Collections'
       return axios.get(`${S3_URL}/${filename}.json`).then((response) => {
-        return parseData(response.data)
+        let collections = []
+        response.data.rows.forEach(r => r.push(collections))
+        return collections
       })
     } else {
       return axios.get(`${API_URL}/how_to_help`, {
         params: {
-          sheet: 'Schema (Admin Only)'
+          sheet: 'Collections'
         }
       })
         .then((response) => {
-          return parseData(response.data)
+          console.log(response)
+          let collections = []
+          response.data.rows.forEach(r => collections.push(...r))
+          return collections
         })
         .catch((error) => {
           console.error(error)

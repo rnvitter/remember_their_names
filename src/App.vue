@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <div class="container" v-if="!loading">
+    <div v-if="!loading">
       <h2 class="app-loading" v-if="loading">
         Loading Their Stories
       </h2>
@@ -163,12 +163,6 @@ h1 {
 
 h2, .link-title {
   font-size: 24px;
-}
-
-h3 {
-  font-size: 14px;
-  font-weight: 700;
-  margin-bottom: 10px;
 }
 
 .text-center {

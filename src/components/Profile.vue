@@ -1,19 +1,19 @@
 <template>
   <div class="profile" :id="`${snakeCaseName}`">
-    <div class="profile-header">
+    <!-- <div class="profile-header">
       <h2 class="profile-name">{{ person.name }}</h2>
       <div class="subtitle">{{ person.date_of_death | formatDate }}</div>
-    </div>
+    </div> -->
     <vueper-slides
       :ref="`${snakeCaseName}-carousel`"
       class="no-shadow"
-      bullets-outside
       :arrows="false"
       :infinite="true"
       :gap="10"
       :dragging-distance="120"
       :autoplay="isAutoplay"
       :pause-on-hover="true"
+      :visible-slides="3"
       :duration="randomNumber(4000, 7000)"
       @mouse-enter="isAutoplay = false">
       <vueper-slide v-if="sections.includes('has_image_on_s3')" style="background-color: var(--primary-color);">
@@ -26,7 +26,7 @@
         </template>
       </vueper-slide>
       <template v-if="sections.includes('description')">
-        <vueper-slide v-for="(item, index) in splitSections(person.description)" :key="index">>
+        <vueper-slide v-for="(item, index) in splitSections(person.description)" :key="`${snakeCaseName}-${index}`">>
           <template v-slot:content>
               <div class="slide-content">
                 <h3>
@@ -158,7 +158,7 @@ const methods = {
 }
 
 export default {
-  name: 'ProfileTwo',
+  name: 'Profile',
   props,
   components,
   computed,
@@ -179,15 +179,13 @@ export default {
 
 <style>
 .profile {
-  margin: 15px 5px;
-  width: calc(50% - 10px);
+  margin: 10px auto;
+  width: 350px;
   display: inline-block;
 }
 
 .profile-header {
-  text-align: start;
-  padding: 10px;
-  /* margin-bottom: 10px; */
+  text-align: center;
 }
 
 .profile-header:nth-child(even) {
@@ -198,34 +196,34 @@ export default {
 }
 
 .profile-name {
-  font-size: 20px;
-  margin-bottom: 0px;
+  font-size: 34px;
+  line-height: 38px;
+  margin-bottom: 5px;
 }
 
 .subtitle {
   color: var(--secondary-color);
   font-family: 'Oswald', sans-serif;
-  font-size: 14px;
+  font-size: 16px;
   font-weight: 400;
   letter-spacing: 1px;
   text-transform: uppercase;
-  margin-left: 1px;
 }
 
-.vueperslides__inner {
+.profile .vueperslides__inner {
   position: relative;
   width: 100%;
   text-align: center;
   /* padding: 20px; */
 }
 
-.vueperslides__inner:after {
+.profile .vueperslides__inner:after {
   content: "";
   display: block;
   padding-top: 100%;
 }
 
-.vueperslides__parallax-wrapper {
+.profile .vueperslides__parallax-wrapper {
   position: absolute;
   width: 100%;
   height: 100% !important;

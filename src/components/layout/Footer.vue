@@ -1,16 +1,10 @@
 <template>
   <div class="footer container">
-    <div class="row">
-      <div class="column">
-        <div class="link-title" @click="goTo('home')">Home</div>
-        <div class="link-title" @click="goTo('statistics')">Know The Statistics</div>
-        <div class="link-title" @click="goTo('how_to_help')">Make A Difference</div>
-      </div>
-      <div class="column">
-        <div class="link-title" @click="goTo('about')">About Us</div>
-        <!-- TODO: hook up contact us button -->
-        <contact-button :linkTitle="true"></contact-button>
-      </div>
+    <div class="row" style="display: flex; justify-content: space-around;">
+      <div class="link-title" @click="goTo('home')">Home</div>
+      <div class="link-title" @click="goTo('about')">About Us</div>
+      <!-- TODO: hook up contact us button -->
+      <contact-button :linkTitle="true"></contact-button>
     </div>
   </div>
 </template>

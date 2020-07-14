@@ -1,5 +1,5 @@
 <template>
-  <div id="home" class="fade-in">
+  <div id="home" class="fade-in container">
     <div class="splash-screen">
       <div class="splash-screen-content">
         <h1 style="word-spacing: 400px;">Remember Their Names</h1>
