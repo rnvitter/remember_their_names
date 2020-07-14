@@ -11,7 +11,7 @@
         class="profile-two-photo"
         :src="getImgUrl(person.name)">
       </v-lazy-image>
-      <div style="height: 300px;">
+      <div class="profile-info">
         <div class="profile-two-header">
           <h2 style="margin-bottom: 0;">{{ person.name }}</h2>
           <div>
@@ -30,7 +30,7 @@
               @click="goTo(person.petition_link)">
           </div>
         </div>
-        <div style="height: calc(100% - 40px); overflow: auto;">
+        <div style="height: calc(100% - 40px); overflow: auto; padding-bottom: 30px;">
           <div class="slide-content">
             <h3>How {{ genderPronoun(person.gender_pronoun).subject }} Died</h3>
             <div class="slide-text">{{ person.description }}</div>
@@ -85,7 +85,6 @@ const methods = {
     return `https://remembertheirnames-assets.s3.us-east-1.amazonaws.com/images/${imageName}.jpg`
   },
   goTo (link) {
-    console.log(link)
     window.open(link, '_blank')
   }
 }
@@ -114,11 +113,32 @@ export default {
   overflow: hidden;
 }
 
+.profile-info {
+  position : relative;
+  height: 300px;
+  background-color: #222;
+  padding: 15px 10px 0 10px;
+}
+
+.profile-info:after {
+  content  : "";
+  position : absolute;
+  z-index  : 1;
+  bottom   : 0;
+  left     : 0;
+  pointer-events   : none;
+  background-image : linear-gradient(to bottom,
+                    rgba(255,255,255, 0),
+                    rgba(34,34,34, 1) 90%);
+  width    : 100%;
+  height   : 4em;
+}
+
 .profile-two-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 10px;
+  margin-bottom: 15px;
   height: 30px;
   padding: 0 10px;
 }

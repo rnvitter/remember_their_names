@@ -4,11 +4,15 @@
     <div class="rtn-card-fallback" v-else>
       <h3>{{ item.name }}</h3>
     </div>
+    <div class="rtn-card-footer">
+      <div>{{ item.type }}</div>
+      <information-outline size="18"></information-outline>
+    </div>
   </div>
 </template>
 
 <script>
-import { mapActions } from 'vuex'
+import InformationOutline from 'mdi-vue/InformationOutline.vue'
 
 const props = {
   item: {
@@ -17,15 +21,13 @@ const props = {
   }
 }
 
-const methods = {
-  ...mapActions({
-    getMetaData: 'resources/getMetaData'
-  })
+const components = {
+  InformationOutline
 }
 
 export default {
   props,
-  methods,
+  components,
   data: () => ({
     loading: true,
     img: null,
@@ -41,11 +43,32 @@ export default {
   height: 100%;
   margin-right: 10px;
   cursor: pointer;
+  vertical-align: top;
+}
+
+.rtn-card-footer {
+  height: 28px;
+  background: #333;
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 8px;
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.2px;
+  opacity: 0.95;
+  border-bottom-left-radius: var(--border-radius);
+  border-bottom-right-radius: var(--border-radius);
 }
 
 .rtn-card-image {
-  height: 100%;
+  height: 200px;
   width: auto;
+  border-top-left-radius: var(--border-radius);
+  border-top-right-radius: var(--border-radius);
 }
 
 h3 {
@@ -57,9 +80,8 @@ h3 {
 .rtn-card-fallback {
   position: absolute;
   width: 133px;
-  height: 100%;
+  height: 200px;
   padding: 8px;
-  height: 100%;
   white-space: initial;
   background-color: #222;
   /* border: 2px solid var(--accent-color); */

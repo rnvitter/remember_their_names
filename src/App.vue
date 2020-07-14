@@ -82,11 +82,12 @@ export default {
   /* footer - 6 */
 
 :root {
-  --primary-color: #000000;
+  --primary-color: #121212;
   --accent-color: #FCE21B;
   --secondary-color: #979797;
   --light-text: #E0E0E0;
   --dark-text: #000000;
+  --border-radius: 4px;
 }
 
 html, body {
@@ -148,7 +149,7 @@ a:hover {
   color: var(--accent-color);
 }
 
-h1, h2, h3, .button, .link-title, .profile-name {
+h1, h2, h3, .link-title, .profile-name {
   font-family: 'Oswald', sans-serif;
   font-weight: 700;
   text-transform: uppercase;
@@ -194,19 +195,13 @@ h2, .link-title {
 
 .button {
   color: var(--dark-text);
+  font-weight: 900;
+  font-size: 12px;
   border: none;
-  font-size: 20px;
-  height: 44px;
-  letter-spacing: 0;
-  display: flex;
-  text-transform: uppercase;
-  border-radius: 0;
-  padding: 0 1.5rem;
-  opacity: 0.95;
-  margin: 0;
+  height: 34px;
   display: flex;
   align-items: center;
-  justify-content: center;
+  margin-bottom: 0;
 }
 
 .button:hover {

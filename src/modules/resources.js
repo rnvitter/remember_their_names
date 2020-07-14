@@ -33,25 +33,13 @@ const actions = {
         }
       })
         .then((response) => {
+          console.log(parseData(response.data))
           return parseData(response.data)
         })
         .catch((error) => {
           console.error(error)
         })
     }
-  },
-  getMetaData: ({ commit }, url) => {
-    return axios.get(`${API_URL}/metadata`, {
-      params: {
-        url: url
-      }
-    })
-      .then((response) => {
-        return response.data
-      })
-      .catch((error) => {
-        console.error(error)
-      })
   },
   getSchema: () => {
     // function parseData(response) {
@@ -75,7 +63,6 @@ const actions = {
         }
       })
         .then((response) => {
-          console.log(response)
           let collections = []
           response.data.rows.forEach(r => collections.push(...r))
           return collections

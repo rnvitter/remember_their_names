@@ -1,3 +1,4 @@
+import Buttons from './Buttons'
 import ButtonWrapper from './ButtonWrapper'
 import Calendar from './Calendar'
 import CalendarWrapper from './CalendarWrapper'
@@ -11,6 +12,7 @@ import Tabs from './Tabs'
 import Tooltip from './Tooltip'
 
 export {
+  Buttons,
   ButtonWrapper,
   Calendar,
   CalendarWrapper,

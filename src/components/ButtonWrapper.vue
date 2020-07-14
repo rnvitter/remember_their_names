@@ -2,7 +2,7 @@
   <div class="button-wrapper">
     <div
       :class="`button${disabled ? ' disabled' : ''}`"
-      :style="leftAlign ? `justify-content: flex-start; background-color: ${this.buttonColor};` : `background-color: ${this.buttonColor};`"
+      :style="leftAlign ? `justify-content: flex-start; ${this.buttonStyles}` : `${this.buttonStyles}`"
       @click="onClick">
       <span >{{ text }}</span>
     </div>
@@ -24,6 +24,11 @@ const props = {
     required: false,
     default: '--secondary-color'
   },
+  textColor: {
+    type: String,
+    required: false,
+    default: 'black'
+  },
   disabled: {
     type: Boolean,
     required: false
@@ -36,7 +41,13 @@ const props = {
 
 const computed = {
   buttonColor () {
-    return getComputedStyle(document.documentElement).getPropertyValue(this.color)
+    if (this.color.startsWith('--')) {
+      return getComputedStyle(document.documentElement).getPropertyValue(this.color)
+    }
+    return this.color
+  },
+  buttonStyles () {
+    return `background-color: ${this.buttonColor}; color: ${this.textColor};`
   }
 }
 
@@ -47,6 +58,10 @@ export default {
 </script>
 
 <style>
+.button {
+  border-radius: var(--border-radius);
+}
+
 .button-wrapper {
   display: inline-block;
   width: 100%;

@@ -10,14 +10,15 @@
         <template v-else>
           <h2 class="card-row-title">Read Their Stories</h2>
           <div class="card-row">
-            <template v-for="(person, rowIndex) in shuffledStories">
+            <template v-for="(person, index) in shuffledStories">
               <div
                 class="rtn-card"
-                style="width: 200px"
-                :key="`profile-${rowIndex}`"
+                style="width: 228px;"
+                :key="`stories-${index}`"
                 @click="cardClick(person, 'stories')">
                 <v-lazy-image
                   class="rtn-card-image"
+                  style="height: 100%;"
                   v-if="person.has_image_on_s3 === 'TRUE'"
                   :id="`${$options.filters.snakeCase(person.name)}-image`"
                   :src="getImgUrl(person.name)">
@@ -35,13 +36,14 @@
           <div>
             <h2 class="card-row-title">This Week's Curated Collection</h2>
             <div class="card-row">
-              <template v-for="(item, index) in featured">
-                <card :item="item" :key="index" @click.native="cardClick(item, rowIndex)"></card>
+              <template v-for="(item, rowIndex) in featured">
+                <card :item="item" :key="rowIndex" @click.native="cardClick(item, 'featured')"></card>
               </template>
             </div>
-            <div class="card-details" v-if="details && activeRow === rowIndex">
-              <div class="card-details-name">{{ details.name }}</div>
+            <div class="card-details" v-if="details && activeRow === 'featured'">
+              <h2 class="card-details-name">{{ details.name }}</h2>
               <div class="card-details-description">{{ details.description }}</div>
+              <buttons :item="details"></buttons>
             </div>
           </div>
           <div v-for="(collection, rowIndex) in collections" :key="rowIndex">
@@ -52,8 +54,9 @@
               </template>
             </div>
             <div class="card-details" v-if="details && activeRow === rowIndex">
-              <div class="card-details-name">{{ details.name }}</div>
+              <h2 class="card-details-name">{{ details.name }}</h2>
               <div class="card-details-description">{{ details.description }}</div>
+              <buttons :item="details"></buttons>
             </div>
           </div>
         </template>
@@ -67,9 +70,10 @@ import { mapActions, mapGetters } from 'vuex'
 import LinkPrevue from 'link-prevue'
 import { VueperSlides, VueperSlide } from 'vueperslides'
 
-import { Card, Profile, ProfileTwo, SelectList } from '@/components'
+import { Buttons, Card, Profile, ProfileTwo, SelectList } from '@/components'
 
 const components = {
+  Buttons,
   Card,
   Profile,
   ProfileTwo,
@@ -140,11 +144,18 @@ const methods = {
   }
 }
 
+const watch = {
+  details () {
+    console.log(this.details)
+  }
+}
+
 export default {
   name: 'Directory',
   components,
   computed,
   methods,
+  watch,
   data: () => ({
     loading: false,
     resources: [],
@@ -166,27 +177,23 @@ export default {
 
     Promise.all(promises).then(() => {
       this.loading = false
-      console.log(this.people)
     })
   }
 }
 </script>
 
 <style>
-#directory {
-  /* padding: 10px; */
-}
-
 .card-row {
-  height: 200px;
+  height: 228px;
   overflow-y: hidden;
   white-space: nowrap;
   text-align: center;
   margin-bottom: 40px;
+  padding-left: 10px;
 }
 
 .card-row-title {
-  margin: 20px 0 20px 10px;
+  margin: 20px;
   /* color: var(--accent-color); */
   text-align: center;
   opacity: 0.9;
@@ -203,5 +210,12 @@ export default {
   white-space: initial;
   background-color: #222;
   /* border: 2px solid var(--accent-color); */
+}
+
+.card-details {
+  margin: 0 20px;
+  background: #222;
+  padding: 20px;
+  border-radius: var(--border-radius);
 }
 </style>
