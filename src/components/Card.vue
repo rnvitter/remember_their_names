@@ -1,6 +1,10 @@
 <template>
   <div class="rtn-card" :style="item.image ? '' : 'width: 133px;'">
-    <img class="rtn-card-image" :src="item.image" v-if="item.image" />
+    <v-lazy-image
+      v-if="item.image"
+      class="rtn-card-image fade-in"
+      :src="item.image">
+    </v-lazy-image>
     <div class="rtn-card-fallback" v-else>
       <h3>{{ item.name }}</h3>
     </div>

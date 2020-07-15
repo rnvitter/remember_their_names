@@ -4,7 +4,7 @@
     style="width: 228px;"
     :key="`stories-${index}`">
     <v-lazy-image
-      class="rtn-card-image"
+      class="rtn-card-image fade-in"
       style="height: 100%;"
       v-if="item.has_image_on_s3 === 'TRUE'"
       :id="`${$options.filters.snakeCase(item.name)}-image`"

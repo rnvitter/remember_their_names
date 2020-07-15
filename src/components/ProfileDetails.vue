@@ -6,9 +6,9 @@
     </div> -->
     <div class="row">
       <v-lazy-image
-        v-if="item.has_image_on_s3"
+        v-if="item.has_image_on_s3 === 'TRUE'"
         :id="`${snakeCaseName}-image`"
-        class="profile-details-photo"
+        class="profile-details-photo fade-in"
         :src="getImgUrl(item.name)">
       </v-lazy-image>
       <div class="profile-info">
@@ -30,7 +30,7 @@
               @click="goTo(item.petition_link)">
           </div>
         </div>
-        <div style="height: calc(100% - 40px); overflow: auto; padding-bottom: 30px;">
+        <div style="height: calc(100% - 40px); overflow: auto; padding-bottom: 20px;">
           <div class="spacing">
             <h3>How {{ genderPronoun(item.gender_pronoun).subject }} Died</h3>
             <div class="slide-text">{{ item.description }}</div>
@@ -106,7 +106,7 @@ export default {
 
 <style>
 .profile-details {
-  margin: 10px auto;
+  margin: 0 10px;
   width: 100%;
   padding: 0 10px;
   height: 300px;
@@ -121,17 +121,15 @@ export default {
 }
 
 .profile-info:after {
-  content  : "";
-  position : absolute;
-  z-index  : 1;
-  bottom   : 0;
-  left     : 0;
-  pointer-events   : none;
-  background-image : linear-gradient(to bottom,
-                    rgba(255,255,255, 0),
-                    rgba(34,34,34, 1) 90%);
-  width    : 100%;
-  height   : 4em;
+  content: "";
+  position: absolute;
+  z-index: 1;
+  bottom: 0;
+  left: 0;
+  pointer-events: none;
+  background-image: linear-gradient(to bottom, rgba(255,255,255, 0),rgba(34,34,34, 1) 90%);
+  width: 100%;
+  height: 50px;
 }
 
 .profile-details-header {
@@ -175,9 +173,14 @@ export default {
   width: 100%;
 }
 
+.rtn-profile-details-fallback,
 .profile-details-photo {
   width: 300px;
   height: 300px;
+}
+
+.rtn-profile-details-fallback .profile-header {
+  width: 300px;
 }
 
 .read-more {

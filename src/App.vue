@@ -1,6 +1,7 @@
 <template>
   <div id="app">
     <div v-if="!loading">
+      <!-- <rtn-header></rtn-header> -->
       <h2 class="app-loading" v-if="loading">
         Loading Their Stories
       </h2>
@@ -14,9 +15,11 @@
 import { mapActions } from 'vuex'
 
 import { debounce } from '@/utils'
+import RtnHeader from '@/components/layout/Header'
 import RtnFooter from '@/components/layout/Footer'
 
 const components = {
+  RtnHeader,
   RtnFooter
 }
 
@@ -137,7 +140,7 @@ h1 {
 }
 
 h2, .link-title {
-  font-size: 24px;
+  font-size: 22px;
 }
 
 .app-loading {
@@ -154,7 +157,7 @@ h2, .link-title {
 .button {
   color: var(--dark-text);
   font-weight: 900;
-  font-size: 12px;
+  font-size: 13px;
   border: none;
   height: 34px;
   display: flex;

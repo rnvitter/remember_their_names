@@ -38,11 +38,10 @@
                   @click.native="cardClick(item, 'featured')"></card>
               </template>
             </div>
-            <div class="card-details" v-if="details && activeRow === 'featured'">
-              <h2 class="card-details-name">{{ details.name }}</h2>
-              <div class="card-details-description">{{ details.description }}</div>
-              <buttons :item="details"></buttons>
-            </div>
+            <template v-if="details && activeRow === 'featured'">
+              <profile-details :item="details" v-if="details.bio"></profile-details>
+              <card-details :item="details" v-else></card-details>
+            </template>
           </div>
           <div v-for="(collection, rowIndex) in collections" :key="rowIndex">
             <h2 class="card-row-title">{{ collection }}</h2>
@@ -51,11 +50,7 @@
                 <card :item="item" :key="index" @click.native="cardClick(item, rowIndex)"></card>
               </template>
             </div>
-            <div class="card-details" v-if="details && activeRow === rowIndex">
-              <h2 class="card-details-name">{{ details.name }}</h2>
-              <div class="card-details-description">{{ details.description }}</div>
-              <buttons :item="details"></buttons>
-            </div>
+            <card-details :item="details" v-if="details && activeRow === rowIndex"></card-details>
           </div>
         </template>
       </div>
@@ -66,14 +61,14 @@
 <script>
 import { mapActions, mapGetters } from 'vuex'
 
-import { Buttons, Card, ProfileCard, ProfileDetails } from '@/components'
+import { Card, CardDetails, ProfileCard, ProfileDetails } from '@/components'
 import mixin from '@/mixin'
 
 const mixins = [mixin]
 
 const components = {
-  Buttons,
   Card,
+  CardDetails,
   ProfileCard,
   ProfileDetails
 }
@@ -170,7 +165,7 @@ export default {
   overflow-y: hidden;
   white-space: nowrap;
   text-align: center;
-  margin-bottom: 40px;
+  margin-bottom: 10px;
   padding-left: 10px;
 }
 
@@ -192,12 +187,5 @@ export default {
   white-space: initial;
   background-color: #222;
   /* border: 2px solid var(--accent-color); */
-}
-
-.card-details {
-  margin: 0 20px;
-  background: #222;
-  padding: 20px;
-  border-radius: var(--border-radius);
 }
 </style>
