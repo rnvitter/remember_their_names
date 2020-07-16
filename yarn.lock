@@ -5135,6 +5135,11 @@ lines-and-columns@^1.1.6:
   resolved "https://registry.yarnpkg.com/lines-and-columns/-/lines-and-columns-1.1.6.tgz#1c00c743b433cd0a4e80758f7b64a57440d9ff00"
   integrity sha1-HADHQ7QzzQpOgHWPe2SldEDZ/wA=
 
+link-prevue@^1.1.3:
+  version "1.1.3"
+  resolved "https://registry.yarnpkg.com/link-prevue/-/link-prevue-1.1.3.tgz#62617fd63f52dc8661501c9cd113fbb768076311"
+  integrity sha512-pgehmQPosrCBpPeq8kqenvUTAuZigiFv5fgzjvoKD9xD67PHTbKOGnUaPYe1EsdECpn9Itfb7fdbGRlT448n7w==
+
 loader-fs-cache@^1.0.0:
   version "1.0.3"
   resolved "https://registry.yarnpkg.com/loader-fs-cache/-/loader-fs-cache-1.0.3.tgz#f08657646d607078be2f0a032f8bd69dd6f277d9"

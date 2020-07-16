@@ -1,12 +1,33 @@
 <template>
   <div id="app">
-    <div class="container" v-if="!loading">
-      <h2 class="app-loading" v-if="loading">
-        Loading Their Stories
-      </h2>
-      <router-view :key="$route.path" class="fade-in"></router-view>
+    <!-- <rtn-header></rtn-header> -->
+    <transition
+      v-if="loading || minimumWait"
+      name="fade"
+      mode="out-in"
+    >
+      <div class="loading-wrapper">
+        <div class="loading fade-in">
+          <div class="loading-row">
+            <div class="loading-text">Remember</div>
+            <div class="loading-rect first-bar-animation"></div>
+          </div>
+          <div class="loading-row">
+            <div class="loading-text">Their</div>
+            <div class="loading-rect second-bar-animation"></div>
+          </div>
+          <div class="loading-row">
+            <div class="loading-text">Names</div>
+            <div class="loading-rect third-bar-animation"></div>
+          </div>
+          <!-- <img src="@/assets/logo.png" class="logo"> -->
+        </div>
+      </div>
+    </transition>
+    <template v-else>
+      <router-view :key="$route.path"></router-view>
       <rtn-footer></rtn-footer>
-    </div>
+    </template>
   </div>
 </template>
 
@@ -14,17 +35,19 @@
 import { mapActions } from 'vuex'
 
 import { debounce } from '@/utils'
+import RtnHeader from '@/components/layout/Header'
 import RtnFooter from '@/components/layout/Footer'
 
 const components = {
+  RtnHeader,
   RtnFooter
 }
 
 const methods = {
   ...mapActions({
     getPeople: 'people/get',
-    setMonth: 'calendar/setMonth',
-    setYear: 'calendar/setYear',
+    getResources: 'resources/get',
+    getSchema: 'resources/getSchema',
     setScreenSize: 'ux/setScreenSize'
   }),
   onResize () {
@@ -40,28 +63,31 @@ export default {
   components,
   methods,
   data: () => ({
-    loading: false
+    loading: false,
+    minimumWait: true
   }),
-  mounted () {
-    this.onResize()
-    window.addEventListener('resize', debounce(() => {
-      this.onResize()
-    }, 1000), { passive: true })
-  },
   beforeMount () {
     this.loading = true
 
-    const d = new Date()
+    setTimeout(() => {
+      this.minimumWait = false
+    }, 3500)
 
-    let promises = [
+    const promises = [
       this.getPeople(),
-      this.setYear(d.getFullYear()),
-      this.setMonth(d.getMonth())
+      this.getSchema(),
+      this.getResources({ endpoint: 'how_to_help', sheet: 'Resources' })
     ]
 
     Promise.all(promises).then(() => {
       this.loading = false
     })
+  },
+  mounted () {
+    this.onResize()
+    window.addEventListener('resize', debounce(() => {
+      this.onResize()
+    }, 1000), { passive: true })
   },
   beforeDestroy () {
     window.removeEventListener('resize', debounce(() => {
@@ -72,21 +98,13 @@ export default {
 </script>
 
 <style>
-/* z-index */
-  /* profile */
-    /* photo - 1 */
-    /* title and description - 2 */
-    /* timeline vertical line - 3 */
-    /* timeline event marker - 4 */
-  /* home buttons - 5 */
-  /* footer - 6 */
-
 :root {
-  --primary-color: #000000;
+  --primary-color: #121212;
   --accent-color: #FCE21B;
   --secondary-color: #979797;
   --light-text: #E0E0E0;
   --dark-text: #000000;
+  --border-radius: 4px;
 }
 
 html, body {
@@ -141,14 +159,7 @@ a:hover {
   color: var(--accent-color);
 }
 
-.highlight {
-  text-transform: uppercase;
-  font-family: 'Oswald', sans-serif;
-  font-weight: 700;
-  color: var(--accent-color);
-}
-
-h1, h2, h3, .button, .link-title, .profile-name {
+h1, h2, h3, .loading-text, .link-title, .profile-name {
   font-family: 'Oswald', sans-serif;
   font-weight: 700;
   text-transform: uppercase;
@@ -162,57 +173,113 @@ h1 {
 }
 
 h2, .link-title {
-  font-size: 24px;
+  font-size: 22px;
 }
 
-h3 {
-  font-size: 14px;
-  font-weight: 700;
-  margin-bottom: 10px;
-}
-
-.text-center {
-  text-align: center;
+.loading-wrapper {
+  display: flex;
+  height: 100vh;
+  align-items: center;
   justify-content: center;
 }
 
-.app-loading {
+.loading {
   font-family: 'Oswald', sans-serif;
-  font-size: 18px;
-  font-weight: 400;
-  opacity: 0.7;
-  text-align: center;
-  margin: 100px 0;
-  height: calc(100vh - 120px);
+  font-size: 80px;
+  font-weight: 700;
+  text-align: start;
+  width: 430px;
+}
+
+.loading-row {
+  position: relative
+}
+
+.loading-text {
+  line-height: 80px;
+  padding-bottom: 6px;
+  letter-spacing: 0px;
+}
+
+.loading-rect {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  right: 0;
+  height: 68px;
+  background-color: var(--accent-color);
+  z-index: 11;
+  width: 100%;
+}
+
+.first-bar-animation {
+  animation: firstBar ease 1s;
+  animation-fill-mode: forwards;
+  animation-delay: 1.5s;
+}
+
+@keyframes firstBar {
+  0% {
+    width: 100%;
+  }
+  100% {
+    width: calc(100% - 376px);
+  }
+}
+
+.second-bar-animation {
+  animation: secondBar ease 1s;
+  animation-fill-mode: forwards;
+  animation-delay: 1.5s;
+}
+
+@keyframes secondBar {
+  0% {
+    width: 100%;
+  }
+  100% {
+    width: calc(100% - 208px);
+  }
+}
+
+.third-bar-animation {
+  animation: thirdBar ease 1s;
+  animation-fill-mode: forwards;
+  animation-delay: 1.5s;
+}
+
+@keyframes thirdBar {
+  0% {
+    width: 100%;
+  }
+  100% {
+    width: calc(100% - 237px);
+  }
+}
+
+.fade-enter-active,
+.fade-leave-active {
+  transition-duration: 1s;
+  transition-property: opacity;
+  transition-timing-function: ease;
+}
+
+.fade-enter,
+.fade-leave-active {
+  opacity: 0
 }
 
 /* buttons */
-.fixed-buttons {
-  position: fixed;
-  bottom: 5px;
-  left: 50%;
-  transform: translateX(-50%);
-  display: inline-block;
-  z-index: 5;
-  width: 100%;
-  animation: fadeIn ease 1s;
-}
-
 .button {
   color: var(--dark-text);
+  font-weight: 900;
+  font-size: 13px;
   border: none;
-  font-size: 20px;
-  height: 44px;
-  letter-spacing: 0;
-  display: flex;
-  text-transform: uppercase;
-  border-radius: 0;
-  padding: 0 1.5rem;
-  opacity: 0.95;
-  margin: 0;
+  height: 34px;
   display: flex;
   align-items: center;
-  justify-content: center;
+  margin-bottom: 0;
+  padding: 0 20px;
 }
 
 .button:hover {
@@ -244,14 +311,6 @@ input.button.button-clear:focus {
   opacity: 0.7;
 }
 
-.icon-button {
-  cursor: pointer;
-}
-
-.icon-button span {
-  color: var(--accent-color);
-}
-
 /* inputs */
 input {
   font-family: 'Oswald', sans-serif;
@@ -278,7 +337,7 @@ select:focus {
 
 /* shared */
 .spacing {
-  margin: 20px 0;
+  margin-bottom: 20px;
 }
 
 .bottom-divider {
@@ -293,7 +352,7 @@ select:focus {
 }
 
 .fade-in {
-  animation: fadeIn ease 1s;
+  animation: fadeIn ease 1.5s;
 }
 
 @keyframes fadeIn {
@@ -305,13 +364,45 @@ select:focus {
   }
 }
 
-@media only screen and (max-width: 330px) {
-  .splash-screen-content h1 {
-    font-size: 68px;
+@media only screen and (max-width: 500px) {
+  .loading {
+    font-size: 58px;
+    width: 300px;
   }
 
-  h1 {
-    font-size: 32px;
+  .loading-text {
+    line-height: 58px;
+  }
+
+  .loading-rect {
+    height: 50px;
+  }
+
+  @keyframes firstBar {
+    0% {
+      width: 100%;
+    }
+    100% {
+      width: calc(100% - 270px);
+    }
+  }
+
+  @keyframes secondBar {
+    0% {
+      width: 100%;
+    }
+    100% {
+      width: calc(100% - 150px);
+    }
+  }
+
+  @keyframes thirdBar {
+    0% {
+      width: 100%;
+    }
+    100% {
+      width: calc(100% - 172px);
+    }
   }
 }
 </style>
