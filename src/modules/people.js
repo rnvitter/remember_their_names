@@ -1,6 +1,7 @@
 import axios from 'axios'
 
 import * as types from './mutation-types'
+
 import { API_URL, S3_URL } from '@/constants'
 
 const state = {

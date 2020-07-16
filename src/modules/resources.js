@@ -34,7 +34,6 @@ const actions = {
       const filename = sheet.replace(/ /g, '_').toLowerCase()
       return axios.get(`${S3_URL}/${filename}.json`).then((response) => {
         let result = parseData(response.data)
-        result = result.forEach(r => r.sheet = 'resources')
         commit(types.PUT_RESOURCES, result)
       })
     } else {
@@ -54,10 +53,10 @@ const actions = {
   },
   getSchema: ({ commit }) => {
     if (process.env.NODE_ENV === 'production') {
-      const filename = 'Collections'
+      const filename = 'collections'
       return axios.get(`${S3_URL}/${filename}.json`).then((response) => {
         let collections = []
-        response.data.rows.forEach(r => r.push(collections))
+        response.data.rows.forEach(r => collections.push(...r))
         commit(types.PUT_COLLECTIONS, collections)
       })
     } else {
