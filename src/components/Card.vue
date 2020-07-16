@@ -1,9 +1,12 @@
 <template>
-  <div class="rtn-card" :style="item.image ? '' : 'width: 133px;'">
+  <div
+    class="rtn-card"
+    :style="item.image ? '' : 'width: 133px;'">
     <img
       v-if="item.image"
       class="rtn-card-image fade-in"
-      :src="item.image">
+      :src="item.image"
+      :draggable="false">
     <!-- <v-lazy-image
       v-if="item.image"
       class="rtn-card-image fade-in"
@@ -12,7 +15,7 @@
     <div class="rtn-card-fallback" v-else>
       <h3>{{ item.name }}</h3>
     </div>
-    <div class="rtn-card-footer">
+    <div :class="['rtn-card-footer', isSelected ? 'selected-card' : '']">
       <div>{{ item.type }}</div>
       <information-outline size="18"></information-outline>
     </div>
@@ -25,6 +28,10 @@ import InformationOutline from 'mdi-vue/InformationOutline.vue'
 const props = {
   item: {
     type: Object,
+    required: true
+  },
+  isSelected: {
+    type: Boolean,
     required: true
   }
 }
@@ -47,6 +54,8 @@ export default {
   margin-right: 10px;
   cursor: pointer;
   vertical-align: top;
+  border-radius: 4px;
+  overflow: hidden;
 }
 
 .rtn-card-footer {
@@ -58,11 +67,12 @@ export default {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 8px;
+  padding: 0 8px 0;
   font-size: 14px;
   font-weight: 700;
   letter-spacing: 0.2px;
   opacity: 0.95;
+  border-bottom: 3px solid #222;
   border-bottom-left-radius: var(--border-radius);
   border-bottom-right-radius: var(--border-radius);
 }
@@ -72,6 +82,7 @@ export default {
   width: auto;
   border-top-left-radius: var(--border-radius);
   border-top-right-radius: var(--border-radius);
+  user-drag: none;
 }
 
 h3 {
@@ -90,11 +101,11 @@ h3 {
   /* border: 2px solid var(--accent-color); */
 }
 
-.rtn-card-fallback:nth-child(odd) {
+/* .rtn-card-fallback:nth-child(odd) {
   color: var(--accent-color);
 }
 
 .rtn-card-fallback:nth-child(even) {
   color: var(--light-text);
-}
+} */
 </style>
