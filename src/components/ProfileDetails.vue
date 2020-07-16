@@ -100,7 +100,6 @@ const computed = {
 
 const methods = {
   genderPronoun (gender) {
-    console.log(this.screenSize)
     return this.$options.filters.genderPronoun(gender)
   },
   getImgUrl (name) {
