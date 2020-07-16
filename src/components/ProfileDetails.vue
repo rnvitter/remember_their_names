@@ -148,8 +148,8 @@ export default {
   bottom: 0;
   left: 0;
   pointer-events: none;
-  background: linear-gradient(to bottom, rgba(255,255,255, 0),rgba(34,34,34, 1));
-  background: -webkit-linear-gradient(top,  rgba(255,255,255, 0) 0%,rgba(34,34,34, 1) 100%); /* Chrome10+,Safari5.1+ */
+  background: linear-gradient(to bottom, rgba(255,255,255, 0), rgba(34,34,34, 1));
+  background: -webkit-linear-gradient(top, rgba(255,255,255, 0) 0%, rgba(34,34,34, 1) 100%); /* Chrome10+,Safari5.1+ */
   width: 100%;
   height: 50px;
 }
