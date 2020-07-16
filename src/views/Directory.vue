@@ -1,65 +1,58 @@
 <template>
   <div id="directory">
-    <!-- <h1 class="spacing" :style="`margin-bottom: ${collections.length === 0 ? '50px' : '20px'};`">Directory</h1> -->
-    <h2 class="app-loading" v-if="loading">
-      Loading Resources
-    </h2>
-    <div class="fade-in" v-else>
+    <div>
       <div>
-        <div v-if="resources.length === 0" style="text-align: center;">No Resources</div>
-        <template v-else>
-          <h2 class="card-row-title">Read Their Stories</h2>
-          <div class="card-row">
-            <template v-for="(item, index) in shuffledStories">
+        <h2 class="card-row-title">Read Their Stories</h2>
+        <div class="card-row fade-in">
+          <template v-for="(item, index) in shuffledStories">
+            <profile-card
+              :item="item"
+              :index="index"
+              :key="index"
+              @click.native="cardClick(item, 'stories')">
+            </profile-card>
+          </template>
+        </div>
+        <profile-details :item="details" v-if="details && activeRow === 'stories'"></profile-details>
+        <div>
+          <h2 class="card-row-title">This Week's Curated Collection</h2>
+          <div class="card-row fade-in">
+            <template v-for="(item, rowIndex) in featured">
               <profile-card
+                v-if="item.bio"
                 :item="item"
-                :index="index"
-                :key="index"
-                @click.native="cardClick(item, 'stories')">
+                :index="rowIndex"
+                :key="rowIndex"
+                :featured="true"
+                @click.native="cardClick(item, 'featured')">
               </profile-card>
+              <card v-else
+                :item="item"
+                :key="rowIndex"
+                @click.native="cardClick(item, 'featured')"></card>
             </template>
           </div>
-          <profile-details :item="details" v-if="details && activeRow === 'stories'"></profile-details>
-          <div>
-            <h2 class="card-row-title">This Week's Curated Collection</h2>
-            <div class="card-row">
-              <template v-for="(item, rowIndex) in featured">
-                <profile-card
-                  v-if="item.bio"
-                  :item="item"
-                  :index="rowIndex"
-                  :key="rowIndex"
-                  :featured="true"
-                  @click.native="cardClick(item, 'featured')">
-                </profile-card>
-                <card v-else
-                  :item="item"
-                  :key="rowIndex"
-                  @click.native="cardClick(item, 'featured')"></card>
-              </template>
-            </div>
-            <template v-if="details && activeRow === 'featured'">
-              <profile-details :item="details" v-if="details.bio"></profile-details>
-              <card-details :item="details" v-else></card-details>
+          <template v-if="details && activeRow === 'featured'">
+            <profile-details :item="details" v-if="details.bio"></profile-details>
+            <card-details :item="details" v-else></card-details>
+          </template>
+        </div>
+        <div v-for="(collection, rowIndex) in collections" :key="rowIndex">
+          <h2 class="card-row-title">{{ collection }}</h2>
+          <div class="card-row fade-in">
+            <template v-for="(item, index) in shuffledResources.filter(r => r.collections && r.collections.includes(collection))">
+              <card :item="item" :key="index" @click.native="cardClick(item, rowIndex)"></card>
             </template>
           </div>
-          <div v-for="(collection, rowIndex) in collections" :key="rowIndex">
-            <h2 class="card-row-title">{{ collection }}</h2>
-            <div class="card-row">
-              <template v-for="(item, index) in shuffledResources.filter(r => r.collections && r.collections.includes(collection))">
-                <card :item="item" :key="index" @click.native="cardClick(item, rowIndex)"></card>
-              </template>
-            </div>
-            <card-details :item="details" v-if="details && activeRow === rowIndex"></card-details>
-          </div>
-        </template>
+          <card-details :item="details" v-if="details && activeRow === rowIndex"></card-details>
+        </div>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import { mapActions, mapGetters } from 'vuex'
+import { mapGetters } from 'vuex'
 
 import { Card, CardDetails, ProfileCard, ProfileDetails } from '@/components'
 import mixin from '@/mixin'
@@ -75,7 +68,9 @@ const components = {
 
 const computed = {
   ...mapGetters({
-    people: 'people/list'
+    collections: 'resources/collections',
+    people: 'people/list',
+    resources: 'resources/list'
   }),
   shuffledStories () {
     let stories = [...this.people]
@@ -96,10 +91,6 @@ const computed = {
 }
 
 const methods = {
-  ...mapActions({
-    getResources: 'resources/get',
-    getSchema: 'resources/getSchema'
-  }),
   cardClick (item, index) {
     if (item === this.details && this.activeRow === index) {
       this.details = null
@@ -134,28 +125,9 @@ export default {
   methods,
   mixins,
   data: () => ({
-    loading: false,
-    resources: [],
-    collections: [],
-    details: null,
-    activeRow: null
-  }),
-  beforeMount () {
-    this.loading = true
-
-    const promises = [
-      this.getSchema().then((response) => {
-        this.collections = response
-      }),
-      this.getResources({ endpoint: 'how_to_help', sheet: 'Resources' }).then((response) => {
-        this.resources.push(...response)
-      })
-    ]
-
-    Promise.all(promises).then(() => {
-      this.loading = false
-    })
-  }
+    activeRow: null,
+    details: null
+  })
 }
 </script>
 
@@ -170,8 +142,8 @@ export default {
 }
 
 .card-row-title {
-  margin: 20px;
-  /* color: var(--accent-color); */
+  font-size: 20px;
+  margin: 25px 25px 10px 25px;
   text-align: center;
   opacity: 0.9;
 }

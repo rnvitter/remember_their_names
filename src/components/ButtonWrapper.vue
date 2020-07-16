@@ -67,6 +67,10 @@ export default {
   width: 100%;
 }
 
+.button-wrapper div {
+  justify-content: center;
+}
+
 .disabled {
   cursor: none;
   opacity: 0.5;

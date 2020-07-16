@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div style="margin-top: 10px;">
     <button-wrapper
       v-if="item.custom_link_name && item.custom_link_value"
       class="link-button"
@@ -113,7 +113,7 @@ export default {
 
 <style>
 .link-button {
-  margin: 20px 10px 0 0;
+  margin: 10px 10px 0 0;
   width: fit-content;
 }
 </style>

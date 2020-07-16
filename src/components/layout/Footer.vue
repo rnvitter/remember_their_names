@@ -1,18 +1,27 @@
 <template>
   <div class="footer container">
-    <div class="row" style="display: flex; justify-content: space-around;">
-      <div class="link-title" @click="goTo('home')">Home</div>
-      <div class="link-title" @click="goTo('about')">About Us</div>
-      <!-- TODO: hook up contact us button -->
-      <contact-button :linkTitle="true"></contact-button>
-    </div>
+    <button-wrapper
+      v-if="$route.name === 'home'"
+      style="max-width: 300px;"
+      text="Read About Us"
+      :onClick="() => goTo('about')"
+      color="var(--accent-color)">
+    </button-wrapper>
+    <button-wrapper
+      v-if="$route.name === 'about'"
+      style="max-width: 300px;"
+      text="Back to home"
+      :onClick="() => goTo('home')"
+      color="var(--accent-color)">
+    </button-wrapper>
   </div>
 </template>
 
 <script>
-import { ContactButton } from '@/components'
+import { ButtonWrapper, ContactButton } from '@/components'
 
 const components = {
+  ButtonWrapper,
   ContactButton
 }
 
@@ -31,11 +40,16 @@ export default {
 
 <style>
 .footer {
-  height: auto;
+  height: 100px;
   background-color: var(--primary-color);
   padding: 20px 10px !important;
   z-index: 6;
   margin-top: 20px;
+  text-align: center;
+}
+
+.footer .link-title {
+  margin-bottom: 5px;
 }
 
 .footer .link-title,

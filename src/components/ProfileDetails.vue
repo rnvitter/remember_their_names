@@ -6,43 +6,62 @@
     </div> -->
     <div class="row">
       <v-lazy-image
-        v-if="item.has_image_on_s3 === 'TRUE'"
+        v-if="item.has_image_on_s3 === 'TRUE' && !mobile"
         :id="`${snakeCaseName}-image`"
-        class="profile-details-photo fade-in"
+        class="profile-details-photo"
         :src="getImgUrl(item.name)">
       </v-lazy-image>
       <div class="profile-info">
         <div class="profile-details-header">
           <h2 style="margin-bottom: 0;">{{ item.name }}</h2>
-          <div>
-            <input
+          <div v-if="!mobile">
+            <button-wrapper
               v-if="item.donation_link"
-              class="button button-clear"
+              class="link-button"
               style="margin-right: 10px;"
-              type="submit"
-              value="Donate"
-              @click="goTo(item.donation_link)">
-            <input
+              text="Donate"
+              :onClick="() => goTo(item.donation_link)"
+              color="var(--accent-color)">
+            </button-wrapper>
+            <button-wrapper
               v-if="item.petition_link"
-              class="button button-clear"
-              type="submit"
-              value="Sign The Petition"
-              @click="goTo(item.petition_link)">
+              class="link-button"
+              text="Sign the Petition"
+              :onClick="() => goTo(item.petition_link)"
+              color="var(--accent-color)">
+            </button-wrapper>
           </div>
         </div>
-        <div style="height: calc(100% - 40px); overflow: auto; padding-bottom: 20px;">
+        <div class="profile-content" :style="mobile && !item.donation_link && !item.petition_link ? 'height: calc(100% - 40px);' : ''">
           <div class="spacing">
             <h3>How {{ genderPronoun(item.gender_pronoun).subject }} Died</h3>
-            <div class="slide-text">{{ item.description }}</div>
+            <div class="card-text">{{ item.description }}</div>
           </div>
           <div class="spacing">
             <h3>About {{ genderPronoun(item.gender_pronoun).possessive }} Life</h3>
-            <div class="slide-text">{{ item.bio }}</div>
+            <div class="card-text">{{ item.bio }}</div>
           </div>
           <div class="spacing">
             <h3>Our Sources</h3>
             <a class="source" v-for="(source, index) in sources" :key="index" :href="source" target="_blank">{{ source }}</a>
           </div>
+        </div>
+        <div class="profile-footer" v-if="mobile">
+          <button-wrapper
+            v-if="item.donation_link"
+            class="link-button"
+            style="margin-right: 10px;"
+            text="Donate"
+            :onClick="() => goTo(item.donation_link)"
+            color="var(--accent-color)">
+          </button-wrapper>
+          <button-wrapper
+            v-if="item.petition_link"
+            class="link-button"
+            text="Sign the Petition"
+            :onClick="() => goTo(item.petition_link)"
+            color="var(--accent-color)">
+          </button-wrapper>
         </div>
       </div>
     </div>
@@ -73,11 +92,15 @@ const computed = {
   }),
   sources () {
     return this.item.sources.split(',')
+  },
+  mobile () {
+    return this.screenSize.width < 950
   }
 }
 
 const methods = {
   genderPronoun (gender) {
+    console.log(this.screenSize)
     return this.$options.filters.genderPronoun(gender)
   },
   getImgUrl (name) {
@@ -106,7 +129,6 @@ export default {
 
 <style>
 .profile-details {
-  margin: 0 10px;
   width: 100%;
   padding: 0 10px;
   height: 300px;
@@ -130,6 +152,12 @@ export default {
   background-image: linear-gradient(to bottom, rgba(255,255,255, 0),rgba(34,34,34, 1) 90%);
   width: 100%;
   height: 50px;
+}
+
+.profile-content {
+  height: calc(100% - 40px);
+  overflow: auto;
+  padding-bottom: 20px;
 }
 
 .profile-details-header {
@@ -156,7 +184,7 @@ export default {
 }
 
 
-.slide-text {
+.card-text {
   font-weight: 500;
   font-size: 14px;
   line-height: 20px;
@@ -183,18 +211,23 @@ export default {
   width: 300px;
 }
 
-.read-more {
-  margin: 5px 0;
-  font-weight: 700;
-  opacity: 0.7;
-  font-size: 13px;
+.profile-footer {
+  position: absolute;
+  bottom: 0px;
+  left: 0;
   width: 100%;
-  text-align: right;
+  height: 55px;
+  text-align: center;
+  z-index: 2;
 }
 
-@media only screen and (max-width: 600px) {
-  .profile {
-    width: 100%;
+@media only screen and (max-width: 950px) {
+  .profile-content {
+    height: calc(100% - 105px);
+  }
+
+  .profile-info:after {
+    height: 95px;
   }
 }
 </style>

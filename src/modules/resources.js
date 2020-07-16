@@ -1,10 +1,21 @@
 import axios from 'axios'
 
+import * as types from './mutation-types'
 import { API_URL, S3_URL } from '@/constants'
 
-const state = {}
+const state = {
+  collections: [],
+  list: []
+}
 
-const mutations = {}
+const mutations = {
+  [types.PUT_COLLECTIONS] (state, data) {
+    state.collections = data
+  },
+  [types.PUT_RESOURCES] (state, data) {
+    state.list = data
+  }
+}
 
 const actions = {
   get: ({ commit }, { endpoint, sheet }) => {
@@ -24,7 +35,7 @@ const actions = {
       return axios.get(`${S3_URL}/${filename}.json`).then((response) => {
         let result = parseData(response.data)
         result = result.forEach(r => r.sheet = 'resources')
-        return result
+        commit(types.PUT_RESOURCES, result)
       })
     } else {
       return axios.get(`${API_URL}/${endpoint}`, {
@@ -34,20 +45,20 @@ const actions = {
       })
         .then((response) => {
           let result = parseData(response.data)
-          return result
+          commit(types.PUT_RESOURCES, result)
         })
         .catch((error) => {
           console.error(error)
         })
     }
   },
-  getSchema: () => {
+  getSchema: ({ commit }) => {
     if (process.env.NODE_ENV === 'production') {
       const filename = 'Collections'
       return axios.get(`${S3_URL}/${filename}.json`).then((response) => {
         let collections = []
         response.data.rows.forEach(r => r.push(collections))
-        return collections
+        commit(types.PUT_COLLECTIONS, collections)
       })
     } else {
       return axios.get(`${API_URL}/how_to_help`, {
@@ -58,7 +69,7 @@ const actions = {
         .then((response) => {
           let collections = []
           response.data.rows.forEach(r => collections.push(...r))
-          return collections
+          commit(types.PUT_COLLECTIONS, collections)
         })
         .catch((error) => {
           console.error(error)
@@ -67,7 +78,14 @@ const actions = {
   }
 }
 
-const getters = {}
+const getters = {
+  collections (state) {
+    return state.collections
+  },
+  list (state) {
+    return state.list
+  }
+}
 
 export default {
   namespaced: true,

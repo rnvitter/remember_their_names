@@ -1,13 +1,33 @@
 <template>
   <div id="app">
-    <div v-if="!loading">
-      <!-- <rtn-header></rtn-header> -->
-      <h2 class="app-loading" v-if="loading">
-        Loading Their Stories
-      </h2>
-      <router-view :key="$route.path" class="fade-in"></router-view>
+    <!-- <rtn-header></rtn-header> -->
+    <transition
+      v-if="loading || minimumWait"
+      name="fade"
+      mode="out-in"
+    >
+      <div class="loading-wrapper">
+        <div class="loading fade-in">
+          <div class="loading-row">
+            <div class="loading-text">Remember</div>
+            <div class="loading-rect first-bar-animation"></div>
+          </div>
+          <div class="loading-row">
+            <div class="loading-text">Their</div>
+            <div class="loading-rect second-bar-animation"></div>
+          </div>
+          <div class="loading-row">
+            <div class="loading-text">Names</div>
+            <div class="loading-rect third-bar-animation"></div>
+          </div>
+          <!-- <img src="@/assets/logo.png" class="logo"> -->
+        </div>
+      </div>
+    </transition>
+    <template v-else>
+      <router-view :key="$route.path"></router-view>
       <rtn-footer></rtn-footer>
-    </div>
+    </template>
   </div>
 </template>
 
@@ -26,6 +46,8 @@ const components = {
 const methods = {
   ...mapActions({
     getPeople: 'people/get',
+    getResources: 'resources/get',
+    getSchema: 'resources/getSchema',
     setScreenSize: 'ux/setScreenSize'
   }),
   onResize () {
@@ -41,20 +63,31 @@ export default {
   components,
   methods,
   data: () => ({
-    loading: false
+    loading: false,
+    minimumWait: true
   }),
+  beforeMount () {
+    this.loading = true
+
+    setTimeout(() => {
+      this.minimumWait = false
+    }, 3500)
+
+    const promises = [
+      this.getPeople(),
+      this.getSchema(),
+      this.getResources({ endpoint: 'how_to_help', sheet: 'Resources' })
+    ]
+
+    Promise.all(promises).then(() => {
+      this.loading = false
+    })
+  },
   mounted () {
     this.onResize()
     window.addEventListener('resize', debounce(() => {
       this.onResize()
     }, 1000), { passive: true })
-  },
-  beforeMount () {
-    this.loading = true
-
-    this.getPeople().then(() => {
-      this.loading = false
-    })
   },
   beforeDestroy () {
     window.removeEventListener('resize', debounce(() => {
@@ -126,7 +159,7 @@ a:hover {
   color: var(--accent-color);
 }
 
-h1, h2, h3, .link-title, .profile-name {
+h1, h2, h3, .loading-text, .link-title, .profile-name {
   font-family: 'Oswald', sans-serif;
   font-weight: 700;
   text-transform: uppercase;
@@ -143,14 +176,97 @@ h2, .link-title {
   font-size: 22px;
 }
 
-.app-loading {
+.loading-wrapper {
+  display: flex;
+  height: 100vh;
+  align-items: center;
+  justify-content: center;
+}
+
+.loading {
   font-family: 'Oswald', sans-serif;
-  font-size: 18px;
-  font-weight: 400;
-  opacity: 0.7;
-  text-align: center;
-  margin: 100px 0;
-  height: calc(100vh - 120px);
+  font-size: 80px;
+  font-weight: 700;
+  text-align: start;
+  width: 430px;
+}
+
+.loading-row {
+  position: relative
+}
+
+.loading-text {
+  line-height: 80px;
+  padding-bottom: 6px;
+  letter-spacing: 0px;
+}
+
+.loading-rect {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  right: 0;
+  height: 68px;
+  background-color: var(--accent-color);
+  z-index: 11;
+  width: 100%;
+}
+
+.first-bar-animation {
+  animation: firstBar ease 1s;
+  animation-fill-mode: forwards;
+  animation-delay: 1.5s;
+}
+
+@keyframes firstBar {
+  0% {
+    width: 100%;
+  }
+  100% {
+    width: calc(100% - 376px);
+  }
+}
+
+.second-bar-animation {
+  animation: secondBar ease 1s;
+  animation-fill-mode: forwards;
+  animation-delay: 1.5s;
+}
+
+@keyframes secondBar {
+  0% {
+    width: 100%;
+  }
+  100% {
+    width: calc(100% - 208px);
+  }
+}
+
+.third-bar-animation {
+  animation: thirdBar ease 1s;
+  animation-fill-mode: forwards;
+  animation-delay: 1.5s;
+}
+
+@keyframes thirdBar {
+  0% {
+    width: 100%;
+  }
+  100% {
+    width: calc(100% - 237px);
+  }
+}
+
+.fade-enter-active,
+.fade-leave-active {
+  transition-duration: 1s;
+  transition-property: opacity;
+  transition-timing-function: ease;
+}
+
+.fade-enter,
+.fade-leave-active {
+  opacity: 0
 }
 
 /* buttons */
@@ -163,6 +279,7 @@ h2, .link-title {
   display: flex;
   align-items: center;
   margin-bottom: 0;
+  padding: 0 20px;
 }
 
 .button:hover {
@@ -235,7 +352,7 @@ select:focus {
 }
 
 .fade-in {
-  animation: fadeIn ease 1s;
+  animation: fadeIn ease 1.5s;
 }
 
 @keyframes fadeIn {
@@ -247,13 +364,45 @@ select:focus {
   }
 }
 
-@media only screen and (max-width: 330px) {
-  .splash-screen-content h1 {
-    font-size: 68px;
+@media only screen and (max-width: 500px) {
+  .loading {
+    font-size: 58px;
+    width: 300px;
   }
 
-  h1 {
-    font-size: 32px;
+  .loading-text {
+    line-height: 58px;
+  }
+
+  .loading-rect {
+    height: 50px;
+  }
+
+  @keyframes firstBar {
+    0% {
+      width: 100%;
+    }
+    100% {
+      width: calc(100% - 270px);
+    }
+  }
+
+  @keyframes secondBar {
+    0% {
+      width: 100%;
+    }
+    100% {
+      width: calc(100% - 150px);
+    }
+  }
+
+  @keyframes thirdBar {
+    0% {
+      width: 100%;
+    }
+    100% {
+      width: calc(100% - 172px);
+    }
   }
 }
 </style>
