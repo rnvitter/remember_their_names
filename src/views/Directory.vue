@@ -9,6 +9,7 @@
               :item="item"
               :index="index"
               :key="index"
+              :isSelected="details === item && activeRow === 'stories'"
               @click.native="cardClick(item, 'stories')">
             </profile-card>
           </template>
@@ -24,11 +25,13 @@
                 :index="rowIndex"
                 :key="rowIndex"
                 :featured="true"
+                :isSelected="details === item && activeRow === 'featured'"
                 @click.native="cardClick(item, 'featured')">
               </profile-card>
               <card v-else
                 :item="item"
                 :key="rowIndex"
+                :isSelected="details === item && activeRow === 'featured'"
                 @click.native="cardClick(item, 'featured')"></card>
             </template>
           </div>
@@ -41,7 +44,12 @@
           <h2 class="card-row-title">{{ collection }}</h2>
           <div class="card-row fade-in">
             <template v-for="(item, index) in shuffledResources.filter(r => r.collections && r.collections.includes(collection))">
-              <card :item="item" :key="index" @click.native="cardClick(item, rowIndex)"></card>
+              <card
+                :item="item"
+                :key="index"
+                :isSelected="details === item && activeRow === rowIndex"
+                @click.native="cardClick(item, rowIndex)">
+              </card>
             </template>
           </div>
           <card-details :item="details" v-if="details && activeRow === rowIndex"></card-details>
@@ -142,10 +150,11 @@ export default {
 }
 
 .card-row-title {
+  color: var(--accent-color);
   font-size: 20px;
   margin: 25px 25px 10px 25px;
   text-align: center;
-  opacity: 0.9;
+  user-select: none;
 }
 
 .rtn-profile-fallback {

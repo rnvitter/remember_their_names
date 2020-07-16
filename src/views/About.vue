@@ -1,8 +1,8 @@
 <template>
-  <div style="max-width: 600px; margin: 0 auto; padding: 0 10px;">
+  <div id="about" style="max-width: 600px; margin: 0 auto; padding: 0 10px;">
     <h1 class="spacing" style="margin: 30px 0 50px 0;">About Us</h1>
     <h2 class="spacing">About this project</h2>
-    <div class="spacing">Welcome to Remember Their Names. This project aims to further the Black Lives Movement and bring awareness to social justice issues in America, as well as remember the lives and stories of those who have been lost. Remember Their Names intends to accurately represent America’s history of racial inequality and provide educational content for those who are willing to broaden their perspectives. This project is open sourced and relies on our many great volunteers to collect and record the information on our site.</div>
+    <div class="spacing">Welcome to Remember Their Names. This project aims to further the Black Lives Matter Movement and bring awareness to social justice issues in America, as well as remember the lives and stories of those who have been lost. Remember Their Names intends to accurately represent America’s history of racial inequality and provide educational content for those who are willing to broaden their perspectives. This project is open sourced and relies on our many great volunteers to collect and record the information on our site.</div>
     <h2 class="spacing">Request an addition, edit, or removal of a profile</h2>
     <div class="spacing">If you believe we missed someone, if you are a representative of a victim and would like them removed from our website, or if you would like to propose a change to a profile, please contact us.</div>
     <h2 class="spacing">Disclaimer</h2>
@@ -24,3 +24,9 @@ export default {
   components
 }
 </script>
+
+<style>
+#about h2 {
+  color: var(--accent-color);
+}
+</style>

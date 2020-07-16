@@ -161,6 +161,10 @@ a:hover {
   color: var(--accent-color);
 }
 
+.selected-card {
+  border-bottom: 3px solid var(--accent-color);
+}
+
 h1, h2, h3, .loading-text, .link-title, .profile-name {
   font-family: 'Oswald', sans-serif;
   font-weight: 700;
@@ -193,6 +197,7 @@ h2, .link-title {
   font-weight: 700;
   text-align: start;
   width: 430px;
+  pointer-events: none;
 }
 
 .loading-row {
