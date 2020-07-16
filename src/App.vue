@@ -112,6 +112,7 @@ html, body {
   margin: 0;
   padding: 0;
   scroll-behavior: smooth;
+  height: 100%;
 }
 
 * {
@@ -132,6 +133,7 @@ a:hover {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   color: #e0e0e0;
+  height: 100%;
 }
 
 .container {
@@ -177,13 +179,15 @@ h2, .link-title {
 }
 
 .loading-wrapper {
-  display: flex;
-  height: 100vh;
-  align-items: center;
-  justify-content: center;
+  position: relative;
+  height: 100%;
 }
 
 .loading {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
   font-family: 'Oswald', sans-serif;
   font-size: 80px;
   font-weight: 700;

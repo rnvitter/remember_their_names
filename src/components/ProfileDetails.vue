@@ -148,7 +148,7 @@ export default {
   bottom: 0;
   left: 0;
   pointer-events: none;
-  background-image: linear-gradient(to bottom, rgba(255,255,255, 0),rgba(34,34,34, 1));
+  background: linear-gradient(180deg,hsla(0,0%,0%,0),#222);
   width: 100%;
   height: 50px;
 }
