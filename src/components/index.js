@@ -1,21 +1,19 @@
+import Buttons from './Buttons'
 import ButtonWrapper from './ButtonWrapper'
-import Calendar from './Calendar'
-import CalendarWrapper from './CalendarWrapper'
+import Card from './Card'
+import CardDetails from './CardDetails'
 import ContactButton from './ContactButton'
-import Modal from './Modal'
-import Profile from './Profile'
-import SelectList from './SelectList'
-import Tabs from './Tabs'
+import ProfileCard from './ProfileCard'
+import ProfileDetails from './ProfileDetails'
 import Tooltip from './Tooltip'
 
 export {
+  Buttons,
   ButtonWrapper,
-  Calendar,
-  CalendarWrapper,
+  Card,
+  CardDetails,
   ContactButton,
-  Modal,
-  Profile,
-  SelectList,
-  Tabs,
+  ProfileCard,
+  ProfileDetails,
   Tooltip
 }
