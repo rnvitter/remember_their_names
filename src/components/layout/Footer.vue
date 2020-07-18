@@ -1,32 +1,31 @@
 <template>
   <div class="footer container">
-    <button-wrapper
+    <link-button
       v-if="$route.name === 'home'"
       style="max-width: 300px;"
       text="Read About Us"
-      :onClick="() => goTo('about')"
+      @click.native="routeTo('about')"
       color="var(--accent-color)">
-    </button-wrapper>
-    <button-wrapper
+    </link-button>
+    <link-button
       v-if="$route.name === 'about'"
       style="max-width: 300px;"
       text="Back to home"
-      :onClick="() => goTo('home')"
+      @click.native="routeTo('home')"
       color="var(--accent-color)">
-    </button-wrapper>
+    </link-button>
   </div>
 </template>
 
 <script>
-import { ButtonWrapper, ContactButton } from '@/components'
+import { LinkButton } from '@/components'
 
 const components = {
-  ButtonWrapper,
-  ContactButton
+  LinkButton
 }
 
 const methods = {
-  goTo (route) {
+  routeTo (route) {
     this.$router.push({ name: route }).catch(() => {})
   }
 }
@@ -44,16 +43,7 @@ export default {
   background-color: var(--primary-color);
   padding: 20px 10px !important;
   z-index: 6;
-  margin-top: 20px;
+  margin: 10px auto;
   text-align: center;
-}
-
-.footer .link-title {
-  margin-bottom: 5px;
-}
-
-.footer .link-title,
-.contact-btn-wrapper .link-title {
-  font-size: 16px;
 }
 </style>

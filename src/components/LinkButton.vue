@@ -1,25 +1,13 @@
 <template>
   <div
-    class="share-button"
+    class="link-button"
     :style="buttonStyles"
-    @click="goTo(link)">
-    <div class="share-button-content">
+    @click="link ? goTo(link) : $emit('click')">
+    <div class="link-button-content">
       <slot name="icon"></slot>
       <span :style="$slots['icon'] ? 'padding-left: 4px;' : ''" v-if="text">{{ text }}</span>
     </div>
   </div>
-  <!-- <div
-    v-if="item.youtube"
-    class="share-button"
-    color="#FF0000"
-    textColor="#ffffff"
-    style="border: 0.7px solid #fff; color: #ffffff;"
-    @click="goTo(item.youtube)">
-    <div class="share-button-content">
-      <youtube-icon slot="icon" size="28"></youtube-icon>
-      <span style="padding-left: 5px; font-weight: 500;">Trailer</span>
-    </div>
-  </div> -->
 </template>
 
 <script>
@@ -77,7 +65,7 @@ export default {
 </script>
 
 <style>
-.share-button {
+.link-button {
   height: 34px;
   font-family: 'Avenir';
   font-size: 13px;
@@ -86,18 +74,22 @@ export default {
   font-weight: 900;
   letter-spacing: 1px;
   border-radius: 4px;
-  margin: 15px 10px 0 0;
   cursor: pointer;
+  margin-right: 10px;
 }
 
-.share-button:hover {
+.link-button:last-child {
+  margin-right: 0;
+}
+
+.link-button:hover {
   opacity: 0.9;
 }
 
-.share-button-content {
+.link-button-content {
   display: flex;
   align-items: center;
-  padding: 3px 10px;
+  padding: 3px 14px;
   height: 100%;
 }
 </style>

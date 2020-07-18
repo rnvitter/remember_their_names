@@ -177,8 +177,7 @@ export default {
   margin-top: 10px;
 }
 
-.link-button {
-  margin: 5px 10px 0 0;
-  width: fit-content;
+.card-buttons .link-button {
+  margin: 10px 10px 0 0;
 }
 </style>

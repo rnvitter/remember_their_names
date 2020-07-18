@@ -1,5 +1,4 @@
 import Buttons from './Buttons'
-import ButtonWrapper from './ButtonWrapper'
 import Card from './Card'
 import CardDetails from './CardDetails'
 import ContactButton from './ContactButton'
@@ -10,7 +9,6 @@ import Tooltip from './Tooltip'
 
 export {
   Buttons,
-  ButtonWrapper,
   Card,
   CardDetails,
   ContactButton,

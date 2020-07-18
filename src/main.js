@@ -1,5 +1,3 @@
-import 'milligram/dist/milligram.min.css'
-
 import Vue from 'vue'
 import { VLazyImagePlugin } from 'v-lazy-image'
 

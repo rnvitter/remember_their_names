@@ -5,12 +5,17 @@
       <div class="subtitle">{{ item.date_of_death | formatDate }}</div>
     </div> -->
     <div class="inner-card-row">
-      <v-lazy-image
+      <img
+        class="profile-details-photo"
+        v-if="item.has_image_on_s3 === 'TRUE' && !mobile"
+        :id="`${snakeCaseName}-image`"
+        :src="getImgUrl(item.name)">
+      <!-- <v-lazy-image
         v-if="item.has_image_on_s3 === 'TRUE' && !mobile"
         :id="`${snakeCaseName}-image`"
         class="profile-details-photo"
         :src="getImgUrl(item.name)">
-      </v-lazy-image>
+      </v-lazy-image> -->
       <div class="profile-info">
         <div class="profile-details-header">
           <h2 style="margin-bottom: 0;">{{ item.name }}</h2>
@@ -32,11 +37,11 @@
         <div class="profile-content" :style="mobile && !item.donation_link && !item.petition_link ? 'height: calc(100% - 40px);' : ''">
           <div class="spacing">
             <h3>How {{ genderPronoun(item.gender_pronoun).subject }} Died</h3>
-            <div class="card-text">{{ item.description }}</div>
+            <div>{{ item.description }}</div>
           </div>
           <div class="spacing">
             <h3>About {{ genderPronoun(item.gender_pronoun).possessive }} Life</h3>
-            <div class="card-text">{{ item.bio }}</div>
+            <div>{{ item.bio }}</div>
           </div>
           <div class="spacing">
             <h3>Our Sources</h3>
@@ -153,7 +158,7 @@ export default {
   pointer-events: none;
   background: linear-gradient(180deg,hsla(0,0%,0%,0),#222);
   width: 100%;
-  height: 50px;
+  height: 60px;
 }
 
 .profile-content {
@@ -183,14 +188,6 @@ export default {
   font-weight: 400;
   letter-spacing: 1px;
   text-transform: uppercase;
-}
-
-
-.card-text {
-  font-weight: 500;
-  font-size: 14px;
-  line-height: 20px;
-  width: 100%;
 }
 
 .source {

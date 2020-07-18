@@ -38,5 +38,6 @@ export default {
 .card-details-description {
   max-height: 300px;
   overflow: auto;
+  margin: 20px 0;
 }
 </style>

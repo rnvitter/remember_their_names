@@ -87,12 +87,12 @@ export default {
     this.onResize()
     window.addEventListener('resize', debounce(() => {
       this.onResize()
-    }, 1000), { passive: true })
+    }, 700), { passive: true })
   },
   beforeDestroy () {
     window.removeEventListener('resize', debounce(() => {
       this.onResize()
-    }, 1000), { passive: true })
+    }, 700), { passive: true })
   }
 }
 </script>
@@ -141,12 +141,6 @@ a:hover {
   padding: 0 10px;
 }
 
-.flex-center {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
 .disable-scrollbars::-webkit-scrollbar {
   width: 0px;
   background: transparent; /* Chrome/Safari/Webkit */
@@ -155,10 +149,6 @@ a:hover {
 .disable-scrollbars {
   scrollbar-width: none; /* Firefox */
   -ms-overflow-style: none;  /* IE 10+ */
-}
-
-.yellow {
-  color: var(--accent-color);
 }
 
 .selected-card {
@@ -170,6 +160,7 @@ h1, h2, h3, .loading-text, .link-title, .profile-name {
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.5px;
+  margin: 0;
 }
 
 h1 {
@@ -278,81 +269,9 @@ h2, .link-title {
   opacity: 0
 }
 
-/* buttons */
-.button {
-  color: var(--dark-text);
-  font-weight: 900;
-  font-size: 13px;
-  border: none;
-  height: 34px;
-  display: flex;
-  align-items: center;
-  margin-bottom: 0;
-  padding: 0 20px;
-  width: fit-content;
-}
-
-.button:hover {
-  color: var(--dark-text);
-  opacity: 0.88;
-}
-
-input.button.button-clear {
-  color: var(--accent-color);
-  font-size: 16px;
-  padding: 0 10px;
-}
-
-input.button.button-clear:hover {
-  color: var(--accent-color);
-  opacity: 0.5;
-}
-
-input.button.button-clear:focus {
-  color: var(--accent-color);
-}
-
-.text-button {
-  cursor: pointer;
-  color: var(--accent-color);
-}
-
-.text-button:hover {
-  opacity: 0.7;
-}
-
-/* inputs */
-input {
-  font-family: 'Oswald', sans-serif;
-  font-weight: 700;
-  color: #ffffff;
-  text-transform: uppercase;
-  letter-spacing: 0.4px;
-}
-
-input:hover,
-input:focus,
-input:active,
-input[type='email']:focus,
-input[type='number']:focus,
-input[type='password']:focus,
-input[type='search']:focus,
-input[type='tel']:focus,
-input[type='text']:focus,
-input[type='url']:focus,
-textarea:focus,
-select:focus {
-  border-color: var(--accent-color);
-}
-
 /* shared */
 .spacing {
   margin-bottom: 20px;
-}
-
-.bottom-divider {
-  border-bottom: 1px solid var(--secondary-color);
-  padding-bottom: 20px;
 }
 
 .link-title {
