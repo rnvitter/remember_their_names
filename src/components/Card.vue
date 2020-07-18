@@ -5,6 +5,7 @@
     <img
       v-if="item.image"
       class="rtn-card-image fade-in"
+      :style="item.text_overlay === 'TRUE' ? 'opacity: 0.3;' : ''"
       :src="item.image"
       :draggable="false">
     <!-- <v-lazy-image
@@ -13,6 +14,9 @@
       :src="item.image">
     </v-lazy-image> -->
     <div class="rtn-card-fallback" v-else>
+      <h3>{{ item.name }}</h3>
+    </div>
+    <div class="overlay-text" v-if="item.text_overlay === 'TRUE' && item.image">
       <h3>{{ item.name }}</h3>
     </div>
     <div :class="['rtn-card-footer', isSelected ? 'selected-card' : '']">
@@ -99,6 +103,15 @@ h3 {
   white-space: initial;
   background-color: #222;
   /* border: 2px solid var(--accent-color); */
+}
+
+.overlay-text {
+  position: absolute;
+  width: 100%;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  white-space: break-spaces;
 }
 
 /* .rtn-card-fallback:nth-child(odd) {
