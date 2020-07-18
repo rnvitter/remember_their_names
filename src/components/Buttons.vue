@@ -1,114 +1,144 @@
 <template>
-  <div style="margin-top: 10px;">
-    <button-wrapper
+  <div class="card-buttons">
+    <link-button
       v-if="item.custom_link_name && item.custom_link_value"
-      class="link-button"
-      style=""
+      color="var(--accent-color)"
+      textColor="#000000"
       :text="item.custom_link_name"
-      :onClick="() => goTo(item.custom_link_value)"
-      color="--accent-color">
-    </button-wrapper>
-    <button-wrapper
-      v-if="item.youtube"
-      class="link-button"
-      :text="item.is_youtube_trailer ? 'Trailer' : 'YouTube'"
-      :onClick="() => goTo(item.youtube)"
+      :link="item.custom_link_value">
+    </link-button>
+    <link-button
+      v-if="item.youtube && item.is_youtube_trailer === 'FALSE'"
       color="#FF0000"
-      textColor="#ffffff">
-    </button-wrapper>
-    <button-wrapper
+      textColor="#ffffff"
+      text="Youtube"
+      :link="item.youtube">
+      <youtube-icon slot="icon" size="26"></youtube-icon>
+    </link-button>
+    <link-button
       v-if="item.netflix"
-      class="link-button"
-      text="Netflix"
-      :onClick="() => goTo(item.netflix)"
       color="#E50914"
-      textColor="#ffffff">
-    </button-wrapper>
-    <button-wrapper
+      textColor="#ffffff"
+      text="Netflix"
+      :link="item.netflix">
+      <netflix-icon slot="icon" size="20"></netflix-icon>
+    </link-button>
+    <link-button
       v-if="item.hulu"
-      class="link-button"
+      color="#000000"
+      textColor="#3DBB3D"
       text="Hulu"
-      :onClick="() => goTo(item.hulu)"
-      color="#3DBB3D"
-      textColor="#ffffff">
-    </button-wrapper>
-    <button-wrapper
-      v-if="item.hbo"
-      class="link-button"
-      text="HBO"
-      :onClick="() => goTo(item.hbo)"
-      color="#2bb0d8"
-      textColor="#ffffff">
-    </button-wrapper>
-    <button-wrapper
-      v-if="item.goodreads"
-      class="link-button"
-      text="goodreads"
-      :onClick="() => goTo(item.goodreads)"
-      color="#F4F1EA"
-      textColor="#000000">
-    </button-wrapper>
-    <button-wrapper
-      v-if="item.amazon"
-      class="link-button"
-      text="Amazon"
-      :onClick="() => goTo(item.amazon)"
-      color="#f2ad58"
-      textColor="#000000">
-    </button-wrapper>
-    <button-wrapper
-      v-if="item.google_books"
-      class="link-button"
-      text="Google Books"
-      :onClick="() => goTo(item.google_books)"
-      color="#d14836"
-      textColor="#ffffff">
-    </button-wrapper>
-    <button-wrapper
-      v-if="item.spotify"
-      class="link-button"
-      text="Spotify"
-      :onClick="() => goTo(item.spotify)"
-      color="#1DB954"
-      textColor="#ffffff">
-    </button-wrapper>
-    <button-wrapper
-      v-if="item.apple_music"
-      class="link-button"
-      text="Apple Music"
-      :onClick="() => goTo(item.apple_music)"
-      color="#B166CC"
-      textColor="#ffffff">
-    </button-wrapper>
-    <button-wrapper
+      :link="item.hulu">
+      <hulu-icon slot="icon" size="20"></hulu-icon>
+    </link-button>
+    <link-button
+      v-if="item.prime_video"
+      color="#00A8E1"
+      textColor="#ffffff"
+      text="prime video"
+      :link="item.prime_video">
+      <amazon-icon slot="icon" size="20"></amazon-icon>
+    </link-button>
+    <link-button
+      v-if="item.youtube && item.is_youtube_trailer === 'TRUE'"
+      color="#FF0000"
+      textColor="#ffffff"
+      text="Trailer"
+      :link="item.youtube">
+      <youtube-icon slot="icon" size="26" style="color: #FF0000;"></youtube-icon>
+    </link-button>
+    <img
       v-if="item.apple_store"
-      class="link-button"
-      text="Apple Apps Store"
-      :onClick="() => goTo(item.apple_store)"
-      color="#0071e3"
-      textColor="#ffffff">
-    </button-wrapper>
-    <button-wrapper
+      src="@/assets/app-store.png"
+      style="height: 36px; margin-right: 10px;"
+      @click="goTo(item.apple_store)">
+    <img
       v-if="item.google_play"
-      class="link-button"
-      text="Google Play Store"
-      :onClick="() => goTo(item.google_play)"
-      color="#689f38"
-      textColor="#ffffff">
-    </button-wrapper>
-    <button-wrapper
-      v-if="item.wikipedia"
-      class="link-button"
-      text="Wikipedia"
-      :onClick="() => goTo(item.wikipedia)"
+      src="@/assets/google-play-store.png"
+      style="height: 36px;"
+      @click="goTo(item.google_play)">
+    <!-- <link-button
+      color="#FF0000"
+      textColor="var(--accent-color)"
+      text="More"
+      :textButton="true">
+    </link-button> -->
+    <link-button
+      v-if="item.hbo"
       color="#ffffff"
-      textColor="#222222">
-    </button-wrapper>
+      textColor="#000000"
+      :link="item.hbo">
+      <img
+      slot="icon"
+      src="@/assets/hbo.png" style="height: 16px;">
+    </link-button>
+    <link-button
+      v-if="item.spotify"
+      color="#1DB954"
+      textColor="#ffffff"
+      text="Spotify"
+      :link="item.spotify">
+      <spotify-icon slot="icon" size="20"></spotify-icon>
+    </link-button>
+    <link-button
+      v-if="item.apple_music"
+      color="#B166CC"
+      textColor="#ffffff"
+      text="Apple Music"
+      :link="item.apple_music">
+      <apple-icon slot="icon" size="20"></apple-icon>
+    </link-button>
+    <link-button
+      v-if="item.goodreads"
+      color="#F4F1EA"
+      textColor="#000000"
+      text="goodreads"
+      :link="item.goodreads">
+      <goodreads-icon slot="icon" size="20"></goodreads-icon>
+    </link-button>
+    <link-button
+      v-if="item.amazon"
+      color="#FF9900"
+      textColor="#000000"
+      text="Amazon"
+      :link="item.amazon">
+      <amazon-icon slot="icon" size="20"></amazon-icon>
+    </link-button>
+    <link-button
+      v-if="item.google_books"
+      color="#d14836"
+      textColor="#ffffff"
+      text="Google Books"
+      :link="item.google_books">
+      <google-icon slot="icon" size="20"></google-icon>
+    </link-button>
+    <link-button
+      v-if="item.wikipedia"
+      color="#ffffff"
+      textColor="#222222"
+      text="Wikipedia"
+      :link="item.wikipedia">
+      <wikipedia-icon slot="icon" size="20"></wikipedia-icon>
+    </link-button>
   </div>
 </template>
 
 <script>
-import ButtonWrapper from './ButtonWrapper'
+import AmazonIcon from 'mdi-vue/Amazon.vue'
+import AndroidIcon from 'mdi-vue/Android.vue'
+import AppleIcon from 'mdi-vue/Apple.vue'
+import GoodreadsIcon from 'mdi-vue/Goodreads.vue'
+import GoogleIcon from 'mdi-vue/Google.vue'
+import HuluIcon from 'mdi-vue/Hulu.vue'
+import NetflixIcon from 'mdi-vue/Netflix.vue'
+import SpotifyIcon from 'mdi-vue/Spotify.vue'
+import YoutubeIcon from 'mdi-vue/Youtube.vue'
+import WikipediaIcon from 'mdi-vue/Wikipedia.vue'
+
+import LinkButton from './LinkButton'
+import mixin from '@/mixin'
+
+const mixins = [mixin]
 
 const props = {
   item: {
@@ -117,27 +147,38 @@ const props = {
   }
 }
 
-const methods = {
-  goTo (link) {
-    window.open(link, '_blank')
-  }
-}
-
 const components = {
-  ButtonWrapper
+  AmazonIcon,
+  AndroidIcon,
+  AppleIcon,
+  GoodreadsIcon,
+  GoogleIcon,
+  HuluIcon,
+  LinkButton,
+  NetflixIcon,
+  SpotifyIcon,
+  YoutubeIcon,
+  WikipediaIcon
 }
 
 export default {
   name: 'Buttons',
+  mixins,
   props,
-  components,
-  methods
+  components
 }
 </script>
 
 <style>
+.card-buttons {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  margin-top: 10px;
+}
+
 .link-button {
-  margin: 10px 10px 0 0;
+  margin: 5px 10px 0 0;
   width: fit-content;
 }
 </style>

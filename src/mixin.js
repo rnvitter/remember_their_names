@@ -1,5 +1,5 @@
 const methods = {
-  openLink (link) {
+  goTo (link) {
     window.open(link, '_blank')
   },
   getImgUrl (name) {

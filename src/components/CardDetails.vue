@@ -34,4 +34,9 @@ export default {
   padding: 20px;
   border-radius: var(--border-radius);
 }
+
+.card-details-description {
+  max-height: 300px;
+  overflow: auto;
+}
 </style>

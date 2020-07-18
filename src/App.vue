@@ -289,6 +289,7 @@ h2, .link-title {
   align-items: center;
   margin-bottom: 0;
   padding: 0 20px;
+  width: fit-content;
 }
 
 .button:hover {

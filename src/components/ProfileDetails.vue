@@ -4,7 +4,7 @@
       <h2 class="profile-name">{{ item.name }}</h2>
       <div class="subtitle">{{ item.date_of_death | formatDate }}</div>
     </div> -->
-    <div class="row">
+    <div class="inner-card-row">
       <v-lazy-image
         v-if="item.has_image_on_s3 === 'TRUE' && !mobile"
         :id="`${snakeCaseName}-image`"
@@ -14,22 +14,19 @@
       <div class="profile-info">
         <div class="profile-details-header">
           <h2 style="margin-bottom: 0;">{{ item.name }}</h2>
-          <div v-if="!mobile">
-            <button-wrapper
+          <div style="display: flex;" v-if="!mobile">
+            <link-button
               v-if="item.donation_link"
-              class="link-button"
-              style="margin-right: 10px;"
               text="Donate"
-              :onClick="() => goTo(item.donation_link)"
+              :link="item.donation_link"
               color="var(--accent-color)">
-            </button-wrapper>
-            <button-wrapper
+            </link-button>
+            <link-button
               v-if="item.petition_link"
-              class="link-button"
               text="Sign the Petition"
-              :onClick="() => goTo(item.petition_link)"
+              :link="item.petition_link"
               color="var(--accent-color)">
-            </button-wrapper>
+            </link-button>
           </div>
         </div>
         <div class="profile-content" :style="mobile && !item.donation_link && !item.petition_link ? 'height: calc(100% - 40px);' : ''">
@@ -47,21 +44,18 @@
           </div>
         </div>
         <div class="profile-footer" v-if="mobile">
-          <button-wrapper
+          <link-button
             v-if="item.donation_link"
-            class="link-button"
-            style="margin-right: 10px;"
             text="Donate"
-            :onClick="() => goTo(item.donation_link)"
+            :link="item.donation_link"
             color="var(--accent-color)">
-          </button-wrapper>
-          <button-wrapper
+          </link-button>
+          <link-button
             v-if="item.petition_link"
-            class="link-button"
             text="Sign the Petition"
-            :onClick="() => goTo(item.petition_link)"
+            :link="item.petition_link"
             color="var(--accent-color)">
-          </button-wrapper>
+          </link-button>
         </div>
       </div>
     </div>
@@ -72,7 +66,7 @@
 import { mapGetters } from 'vuex'
 import ArrowRight from 'mdi-vue/ArrowRight.vue'
 
-import ButtonWrapper from './ButtonWrapper'
+import LinkButton from './LinkButton'
 
 const props = {
   item: {
@@ -83,7 +77,7 @@ const props = {
 
 const components = {
   ArrowRight,
-  ButtonWrapper
+  LinkButton
 }
 
 const computed = {
@@ -127,18 +121,27 @@ export default {
 </script>
 
 <style>
-.profile-details {
+.inner-card-row {
   width: 100%;
-  padding: 0 10px;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: row;
+}
+
+.profile-details {
+  width: calc(100% - 20px);
+  /* padding: 20px; */
+  margin: 0 10px;
   height: 300px;
   overflow: hidden;
 }
 
 .profile-info {
-  position : relative;
+  position: relative;
   height: 300px;
   background-color: #222;
-  padding: 15px 10px 0 10px;
+  padding: 20px;
 }
 
 .profile-info:after {
@@ -156,7 +159,7 @@ export default {
 .profile-content {
   height: calc(100% - 40px);
   overflow: auto;
-  padding-bottom: 20px;
+  padding-bottom: 10px;
 }
 
 .profile-details-header {
@@ -212,12 +215,13 @@ export default {
 
 .profile-footer {
   position: absolute;
-  bottom: 0px;
-  left: 0;
+  bottom: 20px;
+  left: 20px;
   width: 100%;
-  height: 55px;
+  height: fit-content;
   text-align: center;
   z-index: 2;
+  display: flex;
 }
 
 @media only screen and (max-width: 950px) {
@@ -226,7 +230,7 @@ export default {
   }
 
   .profile-info:after {
-    height: 95px;
+    height: 120px;
   }
 }
 </style>

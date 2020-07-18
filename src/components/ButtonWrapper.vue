@@ -4,7 +4,10 @@
       :class="`button${disabled ? ' disabled' : ''}`"
       :style="leftAlign ? `justify-content: flex-start; ${this.buttonStyles}` : `${this.buttonStyles}`"
       @click="onClick">
-      <span >{{ text }}</span>
+      <div>
+        <slot name="icon"></slot>
+        <span>{{ text }}</span>
+      </div>
     </div>
   </div>
 </template>
@@ -64,7 +67,6 @@ export default {
 
 .button-wrapper {
   display: inline-block;
-  width: 100%;
 }
 
 .button-wrapper div {
