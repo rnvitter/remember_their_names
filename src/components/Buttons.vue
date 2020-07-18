@@ -11,7 +11,7 @@
     <button-wrapper
       v-if="item.youtube"
       class="link-button"
-      text="YouTube"
+      :text="item.is_youtube_trailer ? 'Trailer' : 'YouTube'"
       :onClick="() => goTo(item.youtube)"
       color="#FF0000"
       textColor="#ffffff">
@@ -22,6 +22,14 @@
       text="Netflix"
       :onClick="() => goTo(item.netflix)"
       color="#E50914"
+      textColor="#ffffff">
+    </button-wrapper>
+    <button-wrapper
+      v-if="item.hulu"
+      class="link-button"
+      text="Hulu"
+      :onClick="() => goTo(item.hulu)"
+      color="#3DBB3D"
       textColor="#ffffff">
     </button-wrapper>
     <button-wrapper
@@ -47,6 +55,14 @@
       :onClick="() => goTo(item.amazon)"
       color="#f2ad58"
       textColor="#000000">
+    </button-wrapper>
+    <button-wrapper
+      v-if="item.google_books"
+      class="link-button"
+      text="Google Books"
+      :onClick="() => goTo(item.google_books)"
+      color="#d14836"
+      textColor="#ffffff">
     </button-wrapper>
     <button-wrapper
       v-if="item.spotify"
@@ -79,6 +95,14 @@
       :onClick="() => goTo(item.google_play)"
       color="#689f38"
       textColor="#ffffff">
+    </button-wrapper>
+    <button-wrapper
+      v-if="item.wikipedia"
+      class="link-button"
+      text="Wikipedia"
+      :onClick="() => goTo(item.wikipedia)"
+      color="#ffffff"
+      textColor="#222222">
     </button-wrapper>
   </div>
 </template>
