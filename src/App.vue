@@ -162,7 +162,7 @@ a:hover {
 }
 
 .selected-card {
-  border-bottom: 3px solid var(--accent-color);
+  border-bottom: 3px solid var(--accent-color) !important;
 }
 
 h1, h2, h3, .loading-text, .link-title, .profile-name {

@@ -1,10 +1,10 @@
 <template>
   <div
-    class="rtn-card"
+    :class="['rtn-card', isSelected ? 'selected-card' : '']"
     :style="item.image ? '' : 'width: 133px;'">
     <img
       v-if="item.image"
-      class="rtn-card-image fade-in"
+      :class="['rtn-card-image fade-in', hideFooter ? 'rtn-card-content-fullheight' : '']"
       :style="item.text_overlay === 'TRUE' ? 'opacity: 0.3;' : ''"
       :src="item.image"
       :draggable="false">
@@ -13,13 +13,13 @@
       class="rtn-card-image fade-in"
       :src="item.image">
     </v-lazy-image> -->
-    <div class="rtn-card-fallback" v-else>
+    <div :class="['rtn-card-fallback fade-in', hideFooter ? 'rtn-card-content-fullheight' : '']" v-else>
       <h3>{{ item.name }}</h3>
     </div>
     <div class="overlay-text" v-if="item.text_overlay === 'TRUE' && item.image">
       <h3>{{ item.name }}</h3>
     </div>
-    <div :class="['rtn-card-footer', isSelected ? 'selected-card' : '']">
+    <div :class="['rtn-card-footer']" v-if="!hideFooter">
       <div>{{ item.type }}</div>
       <information-outline size="18"></information-outline>
     </div>
@@ -37,6 +37,11 @@ const props = {
   isSelected: {
     type: Boolean,
     required: true
+  },
+  hideFooter: {
+    type: Boolean,
+    required: false,
+    default: false
   }
 }
 
@@ -60,6 +65,9 @@ export default {
   vertical-align: top;
   border-radius: 4px;
   overflow: hidden;
+  border-bottom: 3px solid #222;
+  border-bottom-left-radius: var(--border-radius);
+  border-bottom-right-radius: var(--border-radius);
 }
 
 .rtn-card-footer {
@@ -76,9 +84,6 @@ export default {
   font-weight: 700;
   letter-spacing: 0.2px;
   opacity: 0.95;
-  border-bottom: 3px solid #222;
-  border-bottom-left-radius: var(--border-radius);
-  border-bottom-right-radius: var(--border-radius);
 }
 
 .rtn-card-image {
@@ -87,6 +92,14 @@ export default {
   border-top-left-radius: var(--border-radius);
   border-top-right-radius: var(--border-radius);
   user-drag: none;
+  opacity: 0.95;
+}
+
+.rtn-card-content-fullheight {
+  height: 228px !important;
+  border-bottom: 3px solid #222;
+  border-bottom-left-radius: var(--border-radius);
+  border-bottom-right-radius: var(--border-radius);
 }
 
 h3 {
@@ -102,7 +115,9 @@ h3 {
   padding: 8px;
   white-space: initial;
   background-color: #222;
-  /* border: 2px solid var(--accent-color); */
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .overlay-text {
@@ -112,6 +127,7 @@ h3 {
   left: 50%;
   transform: translate(-50%, -50%);
   white-space: break-spaces;
+  padding: 10px;
 }
 
 /* .rtn-card-fallback:nth-child(odd) {

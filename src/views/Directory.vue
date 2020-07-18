@@ -48,6 +48,7 @@
                 :item="item"
                 :key="index"
                 :isSelected="details === item && activeRow === rowIndex"
+                :hideFooter="footerFilterList.includes(collection)"
                 @click.native="cardClick(item, rowIndex)">
               </card>
             </template>
@@ -95,6 +96,18 @@ const computed = {
     let stories = this.people.filter(r => r.featured === 'TRUE')
     // stories = stories.forEach(r => r.isStory = true)
     return this.shuffle([...resources, ...stories])
+  },
+  footerFilterList () {
+    // TODO: move this to google sheet
+    return [
+      'one article a day keeps the ignorance away',
+      'Movie night suggestions',
+      'need a new binge-watch?',
+      'Fictional books by black authors',
+      'support black owned businesses',
+      'the anti-racist book list',
+      'podcasts for people on the go'
+    ]
   }
 }
 
