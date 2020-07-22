@@ -10,9 +10,10 @@
       :draggable="false">
     <!-- <v-lazy-image
       v-if="item.image"
-      class="rtn-card-image fade-in"
-      :src="item.image">
-    </v-lazy-image> -->
+     :class="['rtn-card-image fade-in', hideFooter ? 'rtn-card-content-fullheight' : '']"
+      :src="item.image"
+      :draggable="false"> -->
+    </v-lazy-image>
     <div :class="['rtn-card-fallback fade-in', hideFooter ? 'rtn-card-content-fullheight' : '']" v-else>
       <h3>{{ item.name }}</h3>
     </div>
@@ -87,7 +88,7 @@ export default {
 }
 
 .rtn-card-image {
-  height: 200px;
+  height: 197px;
   width: auto;
   border-top-left-radius: var(--border-radius);
   border-top-right-radius: var(--border-radius);

@@ -24,7 +24,7 @@
         </div>
       </div>
     </transition>
-    <template v-else>
+    <template v-if="!loading">
       <router-view :key="$route.path"></router-view>
       <rtn-footer></rtn-footer>
     </template>
