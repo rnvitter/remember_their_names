@@ -1,6 +1,6 @@
 <template>
   <div
-    :class="['rtn-card', isSelected && !featured ? 'selected-card' : '']"
+    :class="['rtn-card', isSelected ? 'selected-card' : '']"
     style="width: 228px;"
     :key="`stories-${index}`">
     <img
@@ -22,7 +22,7 @@
         <div class="subtitle">{{ item.date_of_death | formatDate }}</div>
       </div>
     </div>
-    <div :class="['rtn-card-footer', isSelected ? 'selected-card' : '']" v-if="featured">
+    <div :class="['rtn-card-footer']" v-if="featured">
       <div>Story</div>
       <information-outline size="18"></information-outline>
     </div>
