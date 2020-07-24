@@ -10,12 +10,6 @@
         v-if="item.has_image_on_s3 === 'TRUE' && !mobile"
         :id="`${snakeCaseName}-image`"
         :src="getImgUrl(item.name)">
-      <!-- <v-lazy-image
-        v-if="item.has_image_on_s3 === 'TRUE' && !mobile"
-        :id="`${snakeCaseName}-image`"
-        class="profile-details-photo"
-        :src="getImgUrl(item.name)">
-      </v-lazy-image> -->
       <div class="profile-info">
         <div class="profile-details-header">
           <h2 style="margin-bottom: 0;">{{ item.name }}</h2>

@@ -4,37 +4,67 @@
       <div>
         <h2 class="card-row-title">Read Their Stories</h2>
         <div class="card-row fade-in">
-          <template v-for="(item, index) in shuffledStories">
-            <profile-card
-              :item="item"
-              :index="index"
-              :key="index"
-              :isSelected="details === item && activeRow === 'stories'"
-              @click.native="cardClick(item, 'stories')">
-            </profile-card>
-          </template>
+          <DynamicScroller
+            :items="shuffledStories"
+            :min-item-size="128"
+            key-field="name"
+            direction="horizontal"
+            class="card-row fade-in">
+            <template slot-scope="{ item, index, active }">
+              <DynamicScrollerItem
+                :item="item"
+                :active="active"
+                :size-dependencies="[
+                  item.image,
+                ]"
+                :data-index="index"
+                style="height: 100%;">
+                <profile-card
+                  :item="item"
+                  :index="index"
+                  :key="index"
+                  :isSelected="details === item && activeRow === 'stories'"
+                  @click.native="cardClick(item, 'stories')">
+                </profile-card>
+              </DynamicScrollerItem>
+            </template>
+          </DynamicScroller>
         </div>
         <profile-details :item="details" v-if="details && activeRow === 'stories'"></profile-details>
         <div>
           <h2 class="card-row-title">This Week's Curated Collection</h2>
-          <div class="card-row fade-in">
-            <template v-for="(item, rowIndex) in featured">
-              <profile-card
-                v-if="item.bio"
+          <DynamicScroller
+            :items="featured"
+            :min-item-size="128"
+            key-field="name"
+            direction="horizontal"
+            class="card-row fade-in">
+            <template slot-scope="{ item, index, active }">
+              <DynamicScrollerItem
                 :item="item"
-                :index="rowIndex"
-                :key="rowIndex"
-                :featured="true"
-                :isSelected="details === item && activeRow === 'featured'"
-                @click.native="cardClick(item, 'featured')">
-              </profile-card>
-              <card v-else
-                :item="item"
-                :key="rowIndex"
-                :isSelected="details === item && activeRow === 'featured'"
-                @click.native="cardClick(item, 'featured')"></card>
+                :active="active"
+                :size-dependencies="[
+                  item.image,
+                ]"
+                :data-index="index"
+                style="height: 100%;">
+                <profile-card
+                  v-if="item.bio"
+                  :item="item"
+                  :index="index"
+                  :key="index"
+                  :featured="true"
+                  :isSelected="details === item && activeRow === 'featured'"
+                  @click.native="cardClick(item, 'featured')">
+                </profile-card>
+                <card v-else
+                  :item="item"
+                  :key="index"
+                  :isSelected="details === item && activeRow === 'featured'"
+                  @click.native="cardClick(item, 'featured')"></card>
+              </DynamicScrollerItem>
             </template>
-          </div>
+          </DynamicScroller>
           <template v-if="details && activeRow === 'featured'">
             <profile-details :item="details" v-if="details.bio"></profile-details>
             <card-details :item="details" v-else></card-details>
@@ -42,17 +72,31 @@
         </div>
         <div v-for="(collection, rowIndex) in collections" :key="rowIndex">
           <h2 class="card-row-title">{{ collection }}</h2>
-          <div class="card-row fade-in">
-            <template v-for="(item, index) in shuffledResources.filter(r => r.collections && r.collections.includes(collection))">
-              <card
+          <DynamicScroller
+            :items="shuffledResources.filter(r => r.collections && r.collections.includes(collection))"
+            :min-item-size="128"
+            key-field="name"
+            direction="horizontal"
+            class="card-row fade-in">
+            <template slot-scope="{ item, index, active }">
+              <DynamicScrollerItem
                 :item="item"
-                :key="index"
-                :isSelected="details === item && activeRow === rowIndex"
-                :hideFooter="footerFilterList.includes(collection)"
-                @click.native="cardClick(item, rowIndex)">
-              </card>
+                :active="active"
+                :size-dependencies="[
+                  item.image,
+                ]"
+                :data-index="index"
+                style="height: 100%;">
+                <card
+                  :item="item"
+                  :key="index"
+                  :isSelected="details === item && activeRow === rowIndex"
+                  :hideFooter="footerFilterList.includes(collection)"
+                  @click.native="cardClick(item, rowIndex)">
+                </card>
+              </DynamicScrollerItem>
             </template>
-          </div>
+          </DynamicScroller>
           <card-details :item="details" v-if="details && activeRow === rowIndex"></card-details>
         </div>
       </div>

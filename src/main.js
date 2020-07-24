@@ -1,5 +1,7 @@
+import 'vue-virtual-scroller/dist/vue-virtual-scroller.css'
+
 import Vue from 'vue'
-// import { VLazyImagePlugin } from 'v-lazy-image'
+import VueVirtualScroller from 'vue-virtual-scroller'
 
 import App from './App.vue'
 
@@ -7,7 +9,7 @@ import router from './router'
 import store from './store'
 import filters from './filters'
 
-// Vue.use(VLazyImagePlugin)
+Vue.use(VueVirtualScroller)
 
 Vue.config.productionTip = false
 

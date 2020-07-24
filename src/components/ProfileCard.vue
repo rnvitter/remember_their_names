@@ -4,18 +4,11 @@
     style="width: 228px;"
     :key="`stories-${index}`">
     <img
-      class="rtn-card-image fade-in"
+      class="rtn-card-image"
       style="height: 100%;"
       v-if="item.has_image_on_s3 === 'TRUE'"
       :id="`${$options.filters.snakeCase(item.name)}-image`"
       :src="getImgUrl(item.name)">
-    <!-- <v-lazy-image
-      class="rtn-card-image fade-in"
-      style="height: 100%;"
-      v-if="item.has_image_on_s3 === 'TRUE'"
-      :id="`${$options.filters.snakeCase(item.name)}-image`"
-      :src="getImgUrl(item.name)">
-    </v-lazy-image> -->
     <div class="rtn-profile-fallback" v-else>
       <div class="profile-header">
         <h2 class="profile-name">{{ item.name }}</h2>

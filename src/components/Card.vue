@@ -4,16 +4,9 @@
     :style="item.image ? '' : 'width: 133px;'">
     <img
       v-if="item.image"
-      :class="['rtn-card-image fade-in', hideFooter ? 'rtn-card-content-fullheight' : '']"
+      :class="['rtn-card-image', hideFooter ? 'rtn-card-content-fullheight' : '']"
       :style="item.text_overlay === 'TRUE' ? 'opacity: 0.3;' : ''"
-      :src="item.image"
-      :draggable="false">
-    <!-- <v-lazy-image
-      v-if="item.image"
-     :class="['rtn-card-image fade-in', hideFooter ? 'rtn-card-content-fullheight' : '']"
-      :src="item.image"
-      :draggable="false"> -->
-    </v-lazy-image>
+      :src="item.image">
     <div :class="['rtn-card-fallback fade-in', hideFooter ? 'rtn-card-content-fullheight' : '']" v-else>
       <h3>{{ item.name }}</h3>
     </div>
