@@ -7,7 +7,7 @@
       :class="['rtn-card-image', hideFooter ? 'rtn-card-content-fullheight' : '']"
       :style="item.text_overlay === 'TRUE' ? 'opacity: 0.3;' : ''"
       :src="item.image">
-    <div :class="['rtn-card-fallback fade-in', hideFooter ? 'rtn-card-content-fullheight' : '']" v-else>
+    <div :class="['rtn-card-fallback', hideFooter ? 'rtn-card-content-fullheight' : '']" v-else>
       <h3>{{ item.name }}</h3>
     </div>
     <div class="overlay-text" v-if="item.text_overlay === 'TRUE' && item.image">

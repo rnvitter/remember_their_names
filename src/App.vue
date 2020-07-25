@@ -7,7 +7,7 @@
       mode="out-in"
     >
       <div class="loading-wrapper">
-        <div class="loading fade-in">
+        <div class="loading">
           <div class="loading-row">
             <div class="loading-text">Remember</div>
             <div class="loading-rect first-bar-animation"></div>

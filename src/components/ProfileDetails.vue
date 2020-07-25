@@ -12,7 +12,10 @@
         :src="getImgUrl(item.name)">
       <div class="profile-info">
         <div class="profile-details-header">
-          <h2 style="margin-bottom: 0;">{{ item.name }}</h2>
+          <div style="height: fit-content; line-height: 21px;">
+            <h2 style="margin-bottom: 0;">{{ item.name }}</h2>
+            <div class="subtitle" style="font-size: 14px;">{{ item.date_of_death | formatDate }}</div>
+          </div>
           <div style="display: flex;" v-if="!mobile">
             <link-button
               v-if="item.donation_link"
@@ -166,7 +169,7 @@ export default {
   align-items: center;
   justify-content: space-between;
   margin-bottom: 15px;
-  height: 30px;
+  height: 40px;
 }
 
 .profile-name {
@@ -222,6 +225,12 @@ export default {
 
   .profile-info:after {
     height: 120px;
+  }
+}
+
+@media only screen and (max-width: 420px) {
+  .subtitle {
+    font-size: 14px;
   }
 }
 </style>
