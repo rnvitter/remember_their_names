@@ -15,7 +15,7 @@
         <div class="subtitle">{{ item.date_of_death | formatDate }}</div>
       </div>
     </div>
-    <div :class="['rtn-card-footer']" v-if="featured">
+    <div :class="['rtn-card-footer']" v-if="curatedCollection">
       <div>Story</div>
       <information-outline size="18"></information-outline>
     </div>
@@ -42,7 +42,7 @@ const props = {
     type: Number,
     required: true
   },
-  featured: {
+  curatedCollection: {
     type: Boolean,
     required: false
   },

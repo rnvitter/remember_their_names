@@ -3,38 +3,36 @@
     <div>
       <div>
         <h2 class="card-row-title">Read Their Stories</h2>
-        <div class="card-row fade-in">
-          <DynamicScroller
-            :items="shuffledStories"
-            :min-item-size="128"
-            key-field="name"
-            direction="horizontal"
-            class="card-row fade-in">
-            <template slot-scope="{ item, index, active }">
-              <DynamicScrollerItem
+        <DynamicScroller
+          :items="shuffledStories"
+          :min-item-size="128"
+          key-field="name"
+          direction="horizontal"
+          class="card-row fade-in">
+          <template slot-scope="{ item, index, active }">
+            <DynamicScrollerItem
+              :item="item"
+              :active="active"
+              :size-dependencies="[
+                item.image,
+              ]"
+              :data-index="index"
+              style="height: 100%;">
+              <profile-card
                 :item="item"
-                :active="active"
-                :size-dependencies="[
-                  item.image,
-                ]"
-                :data-index="index"
-                style="height: 100%;">
-                <profile-card
-                  :item="item"
-                  :index="index"
-                  :key="index"
-                  :isSelected="details === item && activeRow === 'stories'"
-                  @click.native="cardClick(item, 'stories')">
-                </profile-card>
-              </DynamicScrollerItem>
-            </template>
-          </DynamicScroller>
-        </div>
+                :index="index"
+                :key="index"
+                :isSelected="details === item && activeRow === 'stories'"
+                @click.native="cardClick(item, 'stories')">
+              </profile-card>
+            </DynamicScrollerItem>
+          </template>
+        </DynamicScroller>
         <profile-details :item="details" v-if="details && activeRow === 'stories'"></profile-details>
         <div>
           <h2 class="card-row-title">This Week's Curated Collection</h2>
           <DynamicScroller
-            :items="featured"
+            :items="curatedCollection"
             :min-item-size="128"
             key-field="name"
             direction="horizontal"
@@ -53,19 +51,19 @@
                   :item="item"
                   :index="index"
                   :key="index"
-                  :featured="true"
-                  :isSelected="details === item && activeRow === 'featured'"
-                  @click.native="cardClick(item, 'featured')">
+                  :curatedCollection="true"
+                  :isSelected="details === item && activeRow === 'curatedCollection'"
+                  @click.native="cardClick(item, 'curatedCollection')">
                 </profile-card>
                 <card v-else
                   :item="item"
                   :key="index"
-                  :isSelected="details === item && activeRow === 'featured'"
-                  @click.native="cardClick(item, 'featured')"></card>
+                  :isSelected="details === item && activeRow === 'curatedCollection'"
+                  @click.native="cardClick(item, 'curatedCollection')"></card>
               </DynamicScrollerItem>
             </template>
           </DynamicScroller>
-          <template v-if="details && activeRow === 'featured'">
+          <template v-if="details && activeRow === 'curatedCollection'">
             <profile-details :item="details" v-if="details.bio"></profile-details>
             <card-details :item="details" v-else></card-details>
           </template>
@@ -135,9 +133,9 @@ const computed = {
     resources = this.shuffle(resources)
     return resources
   },
-  featured () {
-    let resources = this.resources.filter(r => r.featured === 'TRUE')
-    let stories = this.people.filter(r => r.featured === 'TRUE')
+  curatedCollection () {
+    let resources = this.resources.filter(r => r.curated_collection === 'TRUE')
+    let stories = this.people.filter(r => r.curated_collection === 'TRUE')
     // stories = stories.forEach(r => r.isStory = true)
     return this.shuffle([...resources, ...stories])
   },
