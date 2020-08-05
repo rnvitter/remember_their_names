@@ -18,7 +18,20 @@
               ]"
               :data-index="index"
               style="height: 100%;">
+              <card
+                v-if="item.name === 'saytheirnames.io'"
+                :item="{
+                  name: 'Read more stories at saytheirnames.io',
+                  text_overlay: 'TRUE',
+                  image: 'https://saytheirnames.io/static/media/logo.64fb0763.png'
+                }"
+                :key="index"
+                :isSelected="false"
+                :hideFooter="true"
+                @click.native="goTo('www.saytheirnames.io')">
+              </card>
               <profile-card
+                v-else
                 :item="item"
                 :index="index"
                 :key="index"
@@ -164,6 +177,7 @@ const methods = {
     }
   },
   shuffle (array) {
+    const readMore = this.resources.find(r => r.name === 'saytheirnames.io')
     var currentIndex = array.length;
     var temporaryValue, randomIndex;
 
@@ -177,7 +191,7 @@ const methods = {
       array[currentIndex] = array[randomIndex]
       array[randomIndex] = temporaryValue
     }
-    return array
+    return [...array, readMore]
   }
 }
 
