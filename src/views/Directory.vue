@@ -28,7 +28,7 @@
                 :key="index"
                 :isSelected="false"
                 :hideFooter="true"
-                @click.native="goTo('www.saytheirnames.io')">
+                @click.native="goTo('https://saytheirnames.io')">
               </card>
               <profile-card
                 v-else
