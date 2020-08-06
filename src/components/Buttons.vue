@@ -40,6 +40,13 @@
       <amazon-icon slot="icon" size="20"></amazon-icon>
     </link-button>
     <link-button
+      v-if="item.disney_plus"
+      color="#0072d2"
+      textColor="#ffffff"
+      text="Disney Plus"
+      :link="item.disney_plus">
+    </link-button>
+    <link-button
       v-if="item.youtube && item.is_youtube_trailer === 'TRUE'"
       color="#FF0000"
       textColor="#ffffff"
