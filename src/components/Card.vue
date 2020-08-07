@@ -1,16 +1,18 @@
 <template>
   <div
     :class="['rtn-card', isSelected ? 'selected-card' : '']"
-    :style="item.image ? '' : 'width: 133px;'">
+    :style="item.image && !fallback ? '' : 'width: 133px;'">
     <img
       v-if="item.image"
+      v-show="!fallback"
       :class="['rtn-card-image', hideFooter ? 'rtn-card-content-fullheight' : '']"
       :style="item.text_overlay === 'TRUE' ? 'opacity: 0.3;' : ''"
-      :src="item.image">
-    <div :class="['rtn-card-fallback', hideFooter ? 'rtn-card-content-fullheight' : '']" v-else>
+      :src="item.image"
+      @error="fallback = true">
+    <div :class="['rtn-card-fallback', hideFooter ? 'rtn-card-content-fullheight' : '']" v-else-if="!item.image || fallback">
       <h3>{{ item.name }}</h3>
     </div>
-    <div class="overlay-text" v-if="item.text_overlay === 'TRUE' && item.image">
+    <div class="overlay-text" v-if="(item.text_overlay === 'TRUE' && item.image) || fallback">
       <h3>{{ item.name }}</h3>
     </div>
     <div :class="['rtn-card-footer']" v-if="!hideFooter">
@@ -43,9 +45,19 @@ const components = {
   InformationOutline
 }
 
+const methods = {
+  getFallback () {
+
+  }
+}
+
 export default {
   props,
-  components
+  components,
+  methods,
+  data: () => ({
+    fallback: false
+  })
 }
 </script>
 
