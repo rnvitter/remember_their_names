@@ -76,7 +76,7 @@ export default {
     const promises = [
       this.getPeople(),
       this.getSchema(),
-      this.getResources({ endpoint: 'how_to_help', sheet: 'Resources' })
+      this.getResources({ endpoint: 'how_to_help', sheet: 'BLM Resources' })
     ]
 
     Promise.all(promises).then(() => {
