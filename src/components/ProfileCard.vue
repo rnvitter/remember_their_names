@@ -8,7 +8,8 @@
       style="height: 100%;"
       v-if="item.has_image_on_s3 === 'TRUE'"
       :id="`${$options.filters.snakeCase(item.name)}-image`"
-      :src="getImgUrl(item.name)">
+      :src="getImgUrl(item.name)"
+      :alt="item.name">
     <div class="rtn-profile-fallback" v-else>
       <div class="profile-header">
         <h2 class="profile-name">{{ item.name }}</h2>

@@ -9,7 +9,8 @@
         class="profile-details-photo"
         v-if="item.has_image_on_s3 === 'TRUE' && !mobile"
         :id="`${snakeCaseName}-image`"
-        :src="getImgUrl(item.name)">
+        :src="getImgUrl(item.name)"
+        :alt="item.name">
       <div class="profile-info">
         <div class="profile-details-header">
           <div style="height: fit-content; line-height: 21px;">
