@@ -3,7 +3,7 @@
     <tooltip :tooltipText="copied ? 'Our email was copied to your clipboard!' : 'Tap to copy our email to your clipboard!'">
       <a :class="['contact-us-btn', linkTitle ? 'link-title' : '']" @click="copyEmail">{{ text }}</a>
     </tooltip>
-    <span id="contact-us-email" style="display: none;">help@remembertheirnames.io</span>
+    <span id="contact-us-email" style="display: none;">remembertheirnames2020@gmail.com</span>
   </div>
 </template>
 

@@ -8,7 +8,7 @@
     <h2 class="spacing">Disclaimer</h2>
     <div class="spacing">This project is open sourced and relies on our many great volunteers to collect and record the information on our site. We’re doing our best to ensure that all resources provided are reliable; but like any human effort, we may make mistakes. We encourage you to examine each source critically, and please reach out if you feel we’ve provided an unreliable resource.</div>
     <h2 class="spacing">Contact Us</h2>
-    <contact-button text="help@remembertheirnames.io" style="margin-bottom: 40px;"></contact-button>
+    <contact-button text="remembertheirnames2020@gmail.com" style="margin-bottom: 40px;"></contact-button>
   </div>
 </template>
 
